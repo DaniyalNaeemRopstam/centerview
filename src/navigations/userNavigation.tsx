@@ -88,6 +88,7 @@ export default function UserNavigator() {
         name="EVENTS"
         component={Events}
         options={{
+          headerTransparent: true,
           headerTitle: 'Events',
         }}
       />
@@ -95,7 +96,8 @@ export default function UserNavigator() {
         name="REGISTEREDEVENTS"
         component={RegisteredEvents}
         options={{
-          headerTitle: 'RegisteredEvents',
+          headerTitle: 'Registered Events',
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
