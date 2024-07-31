@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { createStackNavigator } from '@react-navigation/stack';
 import Dashboard from '../screens/dashboard/dashboard';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -8,6 +9,16 @@ import { widthPercentageToDP } from 'react-native-responsive-screen';
 import Notification from '../assets/SVG/notification';
 import RegisteredIcon from '../assets/SVG/registeredIcon';
 import DashboardIcon from '../assets/SVG/dashboard';
+
+import {createStackNavigator} from '@react-navigation/stack';
+import Dashboard from '../screens/dashboard/dashboard';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import Profile from '../screens/profile/profile';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
+import Notification from '../assets/SVG/notification';
+import RegisteredIcon from '../assets/SVG/registeredIcon';
+
 import Notifications from '../screens/notifications/notifications';
 import ArrowBack from '../assets/SVG/arrowBack';
 import RegisteredEvents from '../screens/events/registeredEvents';
@@ -15,6 +26,7 @@ import Events from '../screens/events/events';
 import Speakers from '../screens/speakers/speakers';
 import SpeakerDetails from '../screens/speakers/speakerDetails';
 import Logout from '../assets/SVG/logout';
+
 import { useDispatch } from 'react-redux';
 import { saveUser } from '../redux/features/AuthSlice';
 import fonts from '../utils/fonts';
@@ -25,12 +37,23 @@ type RootStackParamList = {
   DASHBOARD: undefined;
   PROFILE: undefined;
   BOTTOM_TAB: undefined;
+
+import {useDispatch} from 'react-redux';
+import {saveUser} from '../redux/features/AuthSlice';
+import fonts from '../utils/fonts';
+import Theme from '../utils/theme';
+
+type RootStackParamList = {
+  DASHBOARD: undefined;
+  PROFILE: undefined;
+
   NOTIFICATION: undefined;
   EVENTS: undefined;
   REGISTEREDEVENTS: undefined;
   SPEAKERS: undefined;
   SPEAKERSDETAIL: undefined;
 };
+
 export default function UserNavigator() {
   const Stack = createStackNavigator<RootStackParamList>();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -52,40 +75,6 @@ export default function UserNavigator() {
           );
         },
       }}>
-      {/* <Stack.Screen
-        name="DASHBOARD"
-        component={Dashboard}
-        options={{
-          headerTitle: 'Welcome Kathrine!',
-          headerTransparent: true,
-          headerLeft: () => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('PROFILE')}
-                style={styles.headerleftCont}>
-                <Image
-                  source={require('../assets/profileImage.png')}
-                  style={styles.headerProfileImg}
-                />
-              </TouchableOpacity>
-            );
-          },
-          headerRight: () => {
-            return (
-              <View style={styles.headerRightCont}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('REGISTEREDEVENTS')}>
-                  <RegisteredIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <Notification />
-                </TouchableOpacity>
-              </View>
-            );
-          },
-        }}
-      /> */}
 
       <Stack.Screen
         name="BOTTOM_TAB"
@@ -166,99 +155,9 @@ export default function UserNavigator() {
   );
 }
 
-const Tab = createBottomTabNavigator();
-
-// const BottomTabNavigator = () => {
-//   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-//   const dispatch = useDispatch();
-//   return (
-//     <Tab.Navigator
-//       initialRouteName='DASHBOARD'
-//       screenOptions={({ route }) => ({
-//         tabBarIcon: ({ color, size }) => {
-//           if (route.name === 'ResortMap') {
-//             return <DashboardIcon />
-//           } else if (route.name === 'Dashboard') {
-//             return <DashboardIcon />
-//           } else if (route.name === 'AirportTransfer') {
-//             return <RegisteredIcon />
-//           }
-
-//         },
-//         tabBarActiveTintColor: Theme.ROLLER_COASTER_BLUE,
-//         tabBarInactiveTintColor: 'gray',
-//         headerShadowVisible: false,
-//         headerTitleAlign: 'left',
-//         headerTitleStyle: styles.headerTitleStyle,
-//         headerStyle: styles.headerStyle,
-//         headerLeft: () => {
-//           return (
-//             <TouchableOpacity
-//               onPress={() => navigation.goBack()}
-//               style={styles.headerleftCont}>
-//               <ArrowBack />
-//             </TouchableOpacity>
-//           );
-//         },
-
-//       })}
-//     >
-//       <Tab.Screen
-//         name="ResortMap"
-//         component={Events}
-//         options={{
-//           headerTitle: 'Resort Map',
-//         }}
-//       />
-//       <Tab.Screen
-//         name="DASHBOARD"
-//         component={Dashboard}
-//         options={{
-//           headerTitle: 'Welcome Kathrine!',
-//           headerTransparent: true,
-//           headerLeft: () => {
-//             return (
-//               <TouchableOpacity
-//                 onPress={() => navigation.navigate('PROFILE')}
-//                 style={styles.headerleftCont}>
-//                 <Image
-//                   source={require('../assets/profileImage.png')}
-//                   style={styles.headerProfileImg}
-//                 />
-//               </TouchableOpacity>
-//             );
-//           },
-//           headerRight: () => {
-//             return (
-//               <View style={styles.headerRightCont}>
-//                 <TouchableOpacity
-//                   onPress={() => navigation.navigate('REGISTEREDEVENTS')}>
-//                   <RegisteredIcon />
-//                 </TouchableOpacity>
-//                 <TouchableOpacity
-//                   onPress={() => navigation.navigate('NOTIFICATION')}>
-//                   <Notification />
-//                 </TouchableOpacity>
-//               </View>
-//             );
-//           },
-//         }}
-//       />
-//       <Tab.Screen
-//         name="AirportTransfer"
-//         component={Events}
-//         options={{
-//           headerTitle: 'Airport Transfer',
-//         }}
-//       />
-//     </Tab.Navigator>
-//   )
-// }
-
-
 const styles = StyleSheet.create({
-  headerleftCont: { marginLeft: widthPercentageToDP(3) },
-  headerProfileImg: { width: 31, height: 31, borderRadius: 31 / 2 },
+  headerleftCont: {marginLeft: widthPercentageToDP(3)},
+  headerProfileImg: {width: 31, height: 31, borderRadius: 31 / 2},
   headerRightCont: {
     flexDirection: 'row',
     alignItems: 'center',
