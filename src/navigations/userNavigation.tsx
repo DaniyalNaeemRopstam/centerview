@@ -1,4 +1,15 @@
 import React from 'react';
+
+import { createStackNavigator } from '@react-navigation/stack';
+import Dashboard from '../screens/dashboard/dashboard';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Profile from '../screens/profile/profile';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
+import Notification from '../assets/SVG/notification';
+import RegisteredIcon from '../assets/SVG/registeredIcon';
+import DashboardIcon from '../assets/SVG/dashboard';
+
 import {createStackNavigator} from '@react-navigation/stack';
 import Dashboard from '../screens/dashboard/dashboard';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -7,6 +18,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import Notification from '../assets/SVG/notification';
 import RegisteredIcon from '../assets/SVG/registeredIcon';
+
 import Notifications from '../screens/notifications/notifications';
 import ArrowBack from '../assets/SVG/arrowBack';
 import RegisteredEvents from '../screens/events/registeredEvents';
@@ -14,6 +26,18 @@ import Events from '../screens/events/events';
 import Speakers from '../screens/speakers/speakers';
 import SpeakerDetails from '../screens/speakers/speakerDetails';
 import Logout from '../assets/SVG/logout';
+
+import { useDispatch } from 'react-redux';
+import { saveUser } from '../redux/features/AuthSlice';
+import fonts from '../utils/fonts';
+import Theme from '../utils/theme';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import BottomTabNavigator from './BottomTabNavigator';
+type RootStackParamList = {
+  DASHBOARD: undefined;
+  PROFILE: undefined;
+  BOTTOM_TAB: undefined;
+
 import {useDispatch} from 'react-redux';
 import {saveUser} from '../redux/features/AuthSlice';
 import fonts from '../utils/fonts';
@@ -22,6 +46,7 @@ import Theme from '../utils/theme';
 type RootStackParamList = {
   DASHBOARD: undefined;
   PROFILE: undefined;
+
   NOTIFICATION: undefined;
   EVENTS: undefined;
   REGISTEREDEVENTS: undefined;
@@ -50,40 +75,15 @@ export default function UserNavigator() {
           );
         },
       }}>
+
       <Stack.Screen
-        name="DASHBOARD"
-        component={Dashboard}
+        name="BOTTOM_TAB"
+        component={BottomTabNavigator}
         options={{
-          headerTitle: 'Welcome Kathrine!',
-          headerTransparent: true,
-          headerLeft: () => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('PROFILE')}
-                style={styles.headerleftCont}>
-                <Image
-                  source={require('../assets/profileImage.png')}
-                  style={styles.headerProfileImg}
-                />
-              </TouchableOpacity>
-            );
-          },
-          headerRight: () => {
-            return (
-              <View style={styles.headerRightCont}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('REGISTEREDEVENTS')}>
-                  <RegisteredIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <Notification />
-                </TouchableOpacity>
-              </View>
-            );
-          },
+          headerShown: false
         }}
       />
+
       <Stack.Screen
         name="PROFILE"
         component={Profile}
@@ -92,7 +92,7 @@ export default function UserNavigator() {
           headerRight: () => {
             return (
               <TouchableOpacity
-                onPress={() => dispatch(saveUser({isLoggedIn: false}))}
+                onPress={() => dispatch(saveUser({ isLoggedIn: false }))}
                 style={styles.headerRightCont}>
                 <Logout />
               </TouchableOpacity>

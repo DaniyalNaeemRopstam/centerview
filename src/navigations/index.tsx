@@ -1,7 +1,7 @@
 import React from 'react';
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import Theme from '../utils/theme';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import UserNavigator from './userNavigation';
 import AuthNavigator from './authNavigation';
 
@@ -9,8 +9,8 @@ interface NavigationProps {
   navigationRef: any;
 }
 
-export default function Navigation({navigationRef}: NavigationProps) {
-  const {isLoggedIn} = useSelector((state: any) => state?.login);
+export default function Navigation({ navigationRef }: NavigationProps) {
+  const { isLoggedIn } = useSelector((state: any) => state?.login);
 
   const MyTheme = {
     ...DefaultTheme,
