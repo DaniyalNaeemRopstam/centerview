@@ -1,18 +1,6 @@
 import React from 'react';
-
-import { createStackNavigator } from '@react-navigation/stack';
-import Dashboard from '../screens/dashboard/dashboard';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import Profile from '../screens/profile/profile';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { widthPercentageToDP } from 'react-native-responsive-screen';
-import Notification from '../assets/SVG/notification';
-import RegisteredIcon from '../assets/SVG/registeredIcon';
-import DashboardIcon from '../assets/SVG/dashboard';
-
 import {createStackNavigator} from '@react-navigation/stack';
-import Dashboard from '../screens/dashboard/dashboard';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Profile from '../screens/profile/profile';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
@@ -31,22 +19,11 @@ import { useDispatch } from 'react-redux';
 import { saveUser } from '../redux/features/AuthSlice';
 import fonts from '../utils/fonts';
 import Theme from '../utils/theme';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomTabNavigator from './BottomTabNavigator';
 type RootStackParamList = {
-  DASHBOARD: undefined;
-  PROFILE: undefined;
   BOTTOM_TAB: undefined;
-
-import {useDispatch} from 'react-redux';
-import {saveUser} from '../redux/features/AuthSlice';
-import fonts from '../utils/fonts';
-import Theme from '../utils/theme';
-
-type RootStackParamList = {
   DASHBOARD: undefined;
   PROFILE: undefined;
-
   NOTIFICATION: undefined;
   EVENTS: undefined;
   REGISTEREDEVENTS: undefined;
