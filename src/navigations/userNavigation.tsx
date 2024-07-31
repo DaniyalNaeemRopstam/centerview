@@ -91,7 +91,7 @@ export default function UserNavigator() {
         name="BOTTOM_TAB"
         component={BottomTabNavigator}
         options={{
-          headerShown:false
+          headerShown: false
         }}
       />
 
@@ -200,7 +200,7 @@ const Tab = createBottomTabNavigator();
 //             </TouchableOpacity>
 //           );
 //         },
-        
+
 //       })}
 //     >
 //       <Tab.Screen
