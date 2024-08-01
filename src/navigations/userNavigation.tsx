@@ -1,13 +1,12 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import Dashboard from '../screens/dashboard/dashboard';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Profile from '../screens/profile/profile';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { widthPercentageToDP } from 'react-native-responsive-screen';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
 import Notification from '../assets/SVG/notification';
 import RegisteredIcon from '../assets/SVG/registeredIcon';
-import DashboardIcon from '../assets/SVG/dashboard';
+
 import Notifications from '../screens/notifications/notifications';
 import ArrowBack from '../assets/SVG/arrowBack';
 import RegisteredEvents from '../screens/events/registeredEvents';
@@ -15,21 +14,23 @@ import Events from '../screens/events/events';
 import Speakers from '../screens/speakers/speakers';
 import SpeakerDetails from '../screens/speakers/speakerDetails';
 import Logout from '../assets/SVG/logout';
+
 import { useDispatch } from 'react-redux';
 import { saveUser } from '../redux/features/AuthSlice';
 import fonts from '../utils/fonts';
 import Theme from '../utils/theme';
 import BottomTabNavigator from './BottomTabNavigator';
 type RootStackParamList = {
+  BOTTOM_TAB: undefined;
   DASHBOARD: undefined;
   PROFILE: undefined;
-  BOTTOM_TAB: undefined;
   NOTIFICATION: undefined;
   EVENTS: undefined;
   REGISTEREDEVENTS: undefined;
   SPEAKERS: undefined;
   SPEAKERSDETAIL: undefined;
 };
+
 export default function UserNavigator() {
   const Stack = createStackNavigator<RootStackParamList>();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -51,7 +52,7 @@ export default function UserNavigator() {
           );
         },
       }}>
-   
+
 
       <Stack.Screen
         name="BOTTOM_TAB"
@@ -88,6 +89,7 @@ export default function UserNavigator() {
         name="EVENTS"
         component={Events}
         options={{
+          headerTransparent: true,
           headerTitle: 'Events',
         }}
       />
@@ -95,7 +97,8 @@ export default function UserNavigator() {
         name="REGISTEREDEVENTS"
         component={RegisteredEvents}
         options={{
-          headerTitle: 'RegisteredEvents',
+          headerTitle: 'Registered Events',
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -132,12 +135,9 @@ export default function UserNavigator() {
   );
 }
 
-
-
-
 const styles = StyleSheet.create({
-  headerleftCont: { marginLeft: widthPercentageToDP(3) },
-  headerProfileImg: { width: 31, height: 31, borderRadius: 31 / 2 },
+  headerleftCont: {marginLeft: widthPercentageToDP(3)},
+  headerProfileImg: {width: 31, height: 31, borderRadius: 31 / 2},
   headerRightCont: {
     flexDirection: 'row',
     alignItems: 'center',
