@@ -24,9 +24,6 @@ const months: string[] = [
   'December'
 ];
 
-
-
-
 export default function Events() {
   const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month() - 1]}, ${moment().year()}`)
   const handleDateChange = (day: number, month: number, year: number) => {

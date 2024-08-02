@@ -53,6 +53,7 @@ export default function UserNavigator() {
         },
       }}>
 
+
       <Stack.Screen
         name="BOTTOM_TAB"
         component={BottomTabNavigator}
