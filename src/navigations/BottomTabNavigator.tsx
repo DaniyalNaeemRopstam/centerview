@@ -15,6 +15,7 @@ import AirportTransferIcon from '../assets/SVG/airportTransfer';
 import ResortMapIcon from '../assets/SVG/resortMapIcon';
 import AirportTransfer from '../screens/airportTransfer/AirportTransfer';
 import ResortMaps from '../screens/resortMaps/ResortMaps';
+import NotificationsIcon from '../components/notificationIcon';
 
 type RootStackParamList = {
   DASHBOARD: undefined;
@@ -32,14 +33,14 @@ const BottomTabNavigator = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <Tab.Navigator
-      initialRouteName='DASHBOARD'
+      initialRouteName='Dashboard'
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          if (route.name === 'ResortMap') {
+          if (route.name === 'Resort Map') {
             return <ResortMapIcon color={color} />
-          } else if (route.name === 'DASHBOARD') {
+          } else if (route.name === 'Dashboard') {
             return <DashboardIcon color={color} />
-          } else if (route.name === 'AirportTransfer') {
+          } else if (route.name === 'Airport Transfer') {
             return <AirportTransferIcon color={color} />
           }
 
@@ -69,7 +70,7 @@ const BottomTabNavigator = () => {
       })}
     >
       <Tab.Screen
-        name="ResortMap"
+        name="Resort Map"
         component={ResortMaps}
         options={{
           headerTitle: 'Resort Map',
@@ -77,7 +78,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="DASHBOARD"
+        name="Dashboard"
         component={Dashboard}
         options={{
           headerTitle: 'Welcome Kathrine!',
@@ -88,7 +89,7 @@ const BottomTabNavigator = () => {
                 onPress={() => navigation.navigate('PROFILE')}
                 style={styles.headerleftCont}>
                 <Image
-                  source={require('../assets/profileImage.png')}
+                  source={require('../assets/speakers/Alex.png')}
                   style={styles.headerProfileImg}
                 />
               </TouchableOpacity>
@@ -100,7 +101,7 @@ const BottomTabNavigator = () => {
                 
                 <TouchableOpacity
                   onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <Notification />
+                  <NotificationsIcon  notifications={1}/>
                 </TouchableOpacity>
               </View>
             );
@@ -108,7 +109,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="AirportTransfer"
+        name="Airport Transfer"
         component={AirportTransfer}
         options={{
           headerTitle: 'Airport Transfer',
@@ -124,8 +125,8 @@ export default BottomTabNavigator
 
 
 const styles = StyleSheet.create({
-  headerleftCont: { marginLeft: widthPercentageToDP(3), },
-  headerProfileImg: { width: 51, height: 51, borderRadius: 31 / 2 },
+  headerleftCont: { marginLeft: widthPercentageToDP(4), },
+  headerProfileImg: {width: 31, height: 31, borderRadius: 31 / 2 },
   headerRightCont: {
     flexDirection: 'row',
     alignItems: 'center',

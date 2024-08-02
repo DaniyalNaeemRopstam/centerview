@@ -12,8 +12,9 @@ export default function Profile() {
     <ScrollView contentContainerStyle={styles.contentContainerStyle}>
       <View style={styles.imageCont}>
         <Image
-          source={require('../../assets/profileImage.png')}
+          source={require('../../assets/speakers/Alex.png')}
           style={styles.image}
+          resizeMode='contain'
         />
       </View>
       <Text style={styles.profileName}>Kathrine Langford</Text>
@@ -65,6 +66,8 @@ export default function Profile() {
 const styles = StyleSheet.create({
   contentContainerStyle: {alignItems: 'center'},
   imageCont: {
+    width:widthPercentageToDP(30),
+    height:widthPercentageToDP(30),
     borderWidth: 4,
     borderColor: Theme.WHITE_OUT,
     shadowColor: Theme.PANTON_GREY,
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 2,
   },
   profileName: {
-    color: Theme.ROLLER_COASTER_BLUE,
+    color: Theme.BLACK_COLOR,
     fontSize: 16,
     lineHeight: 24,
     fontFamily: fonts.SemiBold,

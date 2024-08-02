@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import TotalEvents from '../../assets/SVG/totalEvents';
 import {
   heightPercentageToDP,
@@ -275,7 +275,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     },
   ]);
 
-  const renderRegisteredEvents = ({item, index}: any) => {
+  const renderRegisteredEvents = ({ item, index }: any) => {
     const isoString = item?.date;
     const formattedDate = moment(isoString).format(
       'DD MMMM, YYYY [at] HH:mm A',
@@ -296,13 +296,13 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     );
   };
 
-  const renderSpeakers = ({item, index}: any) => {
+  const renderSpeakers = ({ item, index }: any) => {
     return (
       <TouchableOpacity
         key={index}
         style={styles.speakerCard}
         onPress={() =>
-          props?.navigation?.navigate('SPEAKERSDETAIL', {speaker: item})
+          props?.navigation?.navigate('SPEAKERSDETAIL', { speaker: {...item, detail:speakers?.[0].detail } })
         }>
         <Image source={item?.image} style={styles.speakerImg} />
         <Text style={styles.speakerName}>{item?.name}</Text>
@@ -310,7 +310,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     );
   };
 
-  const renderEvents = ({item, index}: any) => {
+  const renderEvents = ({ item, index }: any) => {
     const isoString = item?.date;
     const formattedDate = moment(isoString).format(
       'DD MMMM, YYYY [at] HH:mm A',
@@ -340,10 +340,11 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           <View
             // onPress={() => props?.navigation?.navigate('EVENTS')}
             style={styles.topTile}>
-            <TotalEvents  fontSize={widthPercentageToDP(10)} />
+            <TotalEvents fontSize={widthPercentageToDP(10)} />
             <View>
               <Text style={styles.totalNumbers}>12</Text>
-              <Text style={styles.total}>Total Activities</Text>
+              <Text style={styles.total}>Total</Text>
+              <Text style={styles.total}>Activities</Text>
             </View>
           </View>
 
@@ -353,7 +354,8 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
             <TotalSpeakers />
             <View>
               <Text style={styles.totalNumbers}>17</Text>
-              <Text style={styles.total}>Total Speakers</Text>
+              <Text style={styles.total}>Total</Text>
+              <Text style={styles.total}>Speakers</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -368,8 +370,8 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           </View>
         </View>
 
-         {/* <Text style={styles.registeredHeading}>Registered Activities</Text> */}
-       
+        {/* <Text style={styles.registeredHeading}>Registered Activities</Text> */}
+
 
         <View style={styles.headingCont}>
           <Text style={styles.speakersHeading}>Registered Activities</Text>
@@ -425,7 +427,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
 }
 
 const styles = StyleSheet.create({
-  scrollViewStyle: {marginTop: heightPercentageToDP(12)},
+  scrollViewStyle: { marginTop: heightPercentageToDP(12) },
   scrollViewCont: {
     paddingHorizontal: widthPercentageToDP(3),
     marginTop: heightPercentageToDP(3),
@@ -443,7 +445,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingLeft: widthPercentageToDP(3),
     width: widthPercentageToDP(45),
-    paddingVertical: 15,
+    paddingVertical: widthPercentageToDP(2),
     gap: 9.5,
     shadowColor: Theme.PANTON_GREY,
     shadowOffset: {
@@ -462,12 +464,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: fonts.Bold,
     color: Theme.LEAD_COLOR,
+    lineHeight: 24,
   },
   total: {
     fontSize: 12,
     fontFamily: fonts.Regular,
     color: Theme.PANTON_GREY,
-    lineHeight: 16,
+    lineHeight: 14,
   },
   registeredHeading: {
     fontSize: 18,
@@ -519,7 +522,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: widthPercentageToDP(60),
   },
-  registerBtn: {backgroundColor: Theme.ROLLER_COASTER_BLUE},
+  registerBtn: { backgroundColor: Theme.ROLLER_COASTER_BLUE },
   unregisterTxt: {
     color: Theme.WHITE_COLOR,
     fontFamily: fonts.Medium,
@@ -569,7 +572,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  speakerImg: {width: 60, height: 60, borderRadius: 60 / 2},
+  speakerImg: { width: 60, height: 60, borderRadius: 60 / 2 },
   speakerName: {
     fontSize: 12,
     fontFamily: fonts.Medium,

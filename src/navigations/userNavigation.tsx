@@ -20,6 +20,7 @@ import { saveUser } from '../redux/features/AuthSlice';
 import fonts from '../utils/fonts';
 import Theme from '../utils/theme';
 import BottomTabNavigator from './BottomTabNavigator';
+import NotificationsIcon from '../components/notificationIcon';
 type RootStackParamList = {
   BOTTOM_TAB: undefined;
   DASHBOARD: undefined;
@@ -90,33 +91,49 @@ export default function UserNavigator() {
         component={Events}
         options={{
           headerTransparent: true,
-          headerTitle: 'Events',
+          headerTitle: 'Upcoming Activities',
+          headerRight: () => {
+            return (
+              <View style={styles.headerRightCont}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('NOTIFICATION')}>
+                  <NotificationsIcon  notifications={1}/>
+                </TouchableOpacity>
+              </View>
+            );
+          },
         }}
       />
       <Stack.Screen
         name="REGISTEREDEVENTS"
         component={RegisteredEvents}
         options={{
-          headerTitle: 'Registered Events',
+          headerTitle: 'Registered Activities',
           headerTransparent: true,
+          headerRight: () => {
+            return (
+              <View style={styles.headerRightCont}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('NOTIFICATION')}>
+                  <NotificationsIcon  notifications={1}/>
+                </TouchableOpacity>
+              </View>
+            );
+          },
         }}
       />
       <Stack.Screen
         name="SPEAKERS"
         component={Speakers}
         options={{
-          headerTitle: 'Speakers',
+          headerTitle: '2024 Speakers',
           headerTransparent: true,
           headerRight: () => {
             return (
               <View style={styles.headerRightCont}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('REGISTEREDEVENTS')}>
-                  <RegisteredIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
                   onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <Notification />
+                  <NotificationsIcon  notifications={1}/>
                 </TouchableOpacity>
               </View>
             );

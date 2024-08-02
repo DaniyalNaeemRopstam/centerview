@@ -47,7 +47,7 @@ export default function Login() {
       <AppLogo />
 
       <Text style={styles().welcome}>Welcome</Text>
-      <Text style={styles().hello}>Hello there, sign in to continue</Text>
+      <Text style={styles().hello}>Hello there, login to continue</Text>
 
       <LoginImage />
 
@@ -122,13 +122,14 @@ const styles = (props?: boolean) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+      paddingTop:heightPercentageToDP(6)
     },
     welcome: {
       fontSize: 24,
       lineHeight: 28,
       fontFamily: fonts.SemiBold,
       color: Theme.ROLLER_COASTER_BLUE,
-      marginTop: heightPercentageToDP(6.1),
+      marginTop: heightPercentageToDP(4.5),
     },
     hello: {
       fontSize: 12,

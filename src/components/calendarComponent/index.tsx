@@ -4,6 +4,8 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import moment from 'moment';
 import fonts from '../../utils/fonts';
 import Theme from '../../utils/theme';
+import LeftIcon from '../../assets/SVG/leftIcon';
+import RightIcon from '../../assets/SVG/rightIcon';
 
 interface CalendarComponentProps {
   initialMonth: number;
@@ -22,22 +24,24 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ initialMonth, ini
   useEffect(() => {
     if (currentMonth === moment().month() + 1 && currentYear === moment().year()) {
       setSelectedDate(moment().date());
-      onDateChange(moment().date(),currentMonth,currentYear );
+      onDateChange(moment().date(), currentMonth, currentYear);
     } else {
       setSelectedDate(1);
-      onDateChange(1,currentMonth,currentYear );
+      onDateChange(1, currentMonth, currentYear);
     }
   }, [currentMonth, currentYear]);
 
   useEffect(() => {
     if (!isInitialMount) {
       const dayIndex = selectedDate - 1;
-      const offset = dayIndex * wp(15) - wp(30);
+      const elementWidth = wp(10.8);
+      const spacing = wp(2); // marginHorizontal
+      const offset = dayIndex * (elementWidth + spacing) - (wp(42) - elementWidth / 2);
       scrollViewRef.current?.scrollTo({ x: Math.max(offset, 0), animated: true });
     } else {
       setIsInitialMount(false);
     }
-  }, [selectedDate, currentMonth, currentYear,isInitialMount]);
+  }, [selectedDate, currentMonth, currentYear, isInitialMount]);
 
   const daysInMonth = moment(`${currentYear}-${currentMonth}`, 'YYYY-MM').daysInMonth();
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -58,25 +62,27 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ initialMonth, ini
     setCurrentMonth(newMonth);
     setCurrentYear(newYear);
     scrollViewRef.current?.scrollTo({ x: 0, animated: true });
-    
   };
 
   const handleDateSelect = (day: number) => {
     setSelectedDate(day);
     onDateChange(day, currentMonth, currentYear);
     const dayIndex = days.indexOf(day);
-    scrollViewRef.current?.scrollTo({ x: dayIndex * wp(15) - wp(30), animated: true });
+    const elementWidth = wp(10.8);
+    const spacing = wp(2); // marginHorizontal
+    const offset = dayIndex * (elementWidth + spacing) - (wp(42) - elementWidth / 2);
+    scrollViewRef.current?.scrollTo({ x: Math.max(offset, 0), animated: true });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => changeMonth(-1)}>
-          <Text style={styles.arrow}>{'<'}</Text>
+          <LeftIcon />
         </TouchableOpacity>
         <Text style={styles.headerText}>{moment(`${currentYear}-${currentMonth}`, 'YYYY-MM').format('MMMM YYYY')}</Text>
         <TouchableOpacity onPress={() => changeMonth(1)}>
-          <Text style={styles.arrow}>{'>'}</Text>
+          <RightIcon />
         </TouchableOpacity>
       </View>
       <ScrollView
@@ -86,10 +92,10 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ initialMonth, ini
         contentContainerStyle={styles.daysContainer}
       >
         {days.map((day, index) => (
-          <TouchableOpacity key={day} onPress={() => handleDateSelect(day)}>
+          <TouchableOpacity key={day} onPress={() => handleDateSelect(day)} style={styles.dayPress}>
             <View style={[styles.day, selectedDate === day && styles.selectedDay]}>
               <Text style={selectedDate === day ? styles.selectedDayText : styles.dayText}>{day}</Text>
-              <Text style={selectedDate === day ? styles.selectedDayText : styles.dayText2}>{dayLabels[index]}</Text>
+              <Text style={selectedDate === day ? styles.selectedDayText2 : styles.dayText2}>{dayLabels[index]}</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -112,39 +118,43 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontFamily: fonts.Bold,
-    color:Theme.BLACK_COLOR,
+    color: Theme.BLACK_COLOR,
   },
   arrow: {
     fontSize: 26,
     fontFamily: fonts.Medium,
-    color:Theme.BLACK_COLOR,
+    color: Theme.BLACK_COLOR,
   },
   daysContainer: {
     marginTop: hp(1.2),
-    paddingHorizontal: wp(0.5),
+  },
+  dayPress: {
+    borderRadius: wp(2),
+    marginHorizontal: wp(1),
   },
   day: {
-    width: wp(13),
-    height: wp(20),
+    width: wp(10.8),
+    height: wp(16),
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: wp(1),
-    paddingHorizontal: wp(2),
-    paddingVertical: wp(4),
-    borderRadius: wp(2),
+    paddingHorizontal: wp(1),
+    paddingVertical: wp(2),
   },
   selectedDay: {
+    width: wp(10.8),
+    height: wp(16),
     backgroundColor: '#0078C1',
     borderRadius: wp(2),
   },
   dayText: {
     fontSize: hp(2),
     color: Theme.BLACK_COLOR,
-    marginBottom: wp(1),
   },
   selectedDayText: {
     color: Theme.WHITE_COLOR,
     fontSize: hp(2),
+    fontFamily: fonts.SemiBold,
+    lineHeight: hp(2.3),
   },
   dayText2: {
     fontSize: hp(1.5),
@@ -152,7 +162,8 @@ const styles = StyleSheet.create({
   },
   selectedDayText2: {
     color: '#fff',
-    fontSize: hp(2),
+    fontSize: hp(1.5),
+    fontFamily: fonts.Regular,
   },
 });
 
