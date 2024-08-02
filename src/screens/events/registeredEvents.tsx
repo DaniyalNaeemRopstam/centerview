@@ -1,4 +1,4 @@
-import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, { useState } from 'react';
 import Circle from '../../components/backgroundCircle';
 import CalendarComponent from '../../components/calendarComponent';
@@ -60,8 +60,8 @@ export default function RegisteredEvents() {
           <Text style={styles.eventLocation}>{item?.location}</Text>
         </View>
         <CustomButton
-          BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
-          text="Register"
+          BtnContstyle={styles.unregisterBtn}
+          text="Unregister Me!"
           textStyle={styles.unregisterTxt}
         />
       </View>
@@ -95,6 +95,7 @@ export default function RegisteredEvents() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop:Platform.OS === 'android' ? wp(12): null
   },
   date:{
     color:Theme.BLACK_COLOR,

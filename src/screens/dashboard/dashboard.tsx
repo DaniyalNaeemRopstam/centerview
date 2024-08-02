@@ -337,15 +337,15 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
         style={styles.scrollViewStyle}
         contentContainerStyle={styles.scrollViewCont}>
         <View style={styles.topTilesCont}>
-          <TouchableOpacity
-            onPress={() => props?.navigation?.navigate('EVENTS')}
+          <View
+            // onPress={() => props?.navigation?.navigate('EVENTS')}
             style={styles.topTile}>
-            <TotalEvents />
+            <TotalEvents  fontSize={widthPercentageToDP(10)} />
             <View>
               <Text style={styles.totalNumbers}>12</Text>
               <Text style={styles.total}>Total Activities</Text>
             </View>
-          </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             onPress={() => props?.navigation?.navigate('SPEAKERS')}
@@ -358,22 +358,34 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          onPress={() => props?.navigation?.navigate('REGISTEREDEVENTS')}
+        <View
+          // onPress={() => props?.navigation?.navigate('REGISTEREDEVENTS')}
           style={[styles.topTile, styles.topBottomTiles]}>
           <RegisterGreen />
           <View>
             <Text style={styles.totalNumbers}>05</Text>
             <Text style={styles.total}>Registered Activities</Text>
           </View>
-        </TouchableOpacity>
+        </View>
 
-        <Text style={styles.registeredHeading}>Registered Activities</Text>
+         {/* <Text style={styles.registeredHeading}>Registered Activities</Text> */}
+       
+
+        <View style={styles.headingCont}>
+          <Text style={styles.speakersHeading}>Registered Activities</Text>
+          <CustomButton
+            BtnContstyle={styles.seeAllBtn}
+            text="See All"
+            textStyle={styles.seeAllTxt}
+            onPress={() => props?.navigation?.navigate('REGISTEREDEVENTS')}
+          />
+        </View>
 
         <FlatList
           horizontal
           data={registeredEvents.slice(0, 3)}
           renderItem={renderRegisteredEvents}
+          showsHorizontalScrollIndicator={false}
         />
 
         <View style={styles.headingCont}>
@@ -389,6 +401,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           horizontal
           renderItem={renderSpeakers}
           data={speakers.slice(0, 4)}
+          showsHorizontalScrollIndicator={false}
         />
 
         <View style={styles.headingCont}>
@@ -404,6 +417,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           horizontal
           renderItem={renderEvents}
           data={activities.slice(0, 3)}
+          showsHorizontalScrollIndicator={false}
         />
       </ScrollView>
     </>
@@ -441,16 +455,16 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   topBottomTiles: {
-    marginTop: heightPercentageToDP(2),
+    marginVertical: heightPercentageToDP(2),
     width: widthPercentageToDP(94),
   },
   totalNumbers: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: fonts.Bold,
     color: Theme.LEAD_COLOR,
   },
   total: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: fonts.Regular,
     color: Theme.PANTON_GREY,
     lineHeight: 16,

@@ -73,6 +73,7 @@ const BottomTabNavigator = () => {
         component={ResortMaps}
         options={{
           headerTitle: 'Resort Map',
+          headerLeft:null,
         }}
       />
       <Tab.Screen
@@ -96,10 +97,7 @@ const BottomTabNavigator = () => {
           headerRight: () => {
             return (
               <View style={styles.headerRightCont}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('REGISTEREDEVENTS')}>
-                  <RegisteredIcon />
-                </TouchableOpacity>
+                
                 <TouchableOpacity
                   onPress={() => navigation.navigate('NOTIFICATION')}>
                   <Notification />
@@ -114,6 +112,7 @@ const BottomTabNavigator = () => {
         component={AirportTransfer}
         options={{
           headerTitle: 'Airport Transfer',
+          headerLeft:null,
         }}
       />
     </Tab.Navigator>
@@ -125,8 +124,8 @@ export default BottomTabNavigator
 
 
 const styles = StyleSheet.create({
-  headerleftCont: { marginLeft: widthPercentageToDP(3) },
-  headerProfileImg: { width: 31, height: 31, borderRadius: 31 / 2 },
+  headerleftCont: { marginLeft: widthPercentageToDP(3), },
+  headerProfileImg: { width: 51, height: 51, borderRadius: 31 / 2 },
   headerRightCont: {
     flexDirection: 'row',
     alignItems: 'center',

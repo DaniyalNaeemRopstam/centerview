@@ -112,10 +112,12 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontFamily: fonts.Bold,
+    color:Theme.BLACK_COLOR,
   },
   arrow: {
     fontSize: 26,
     fontFamily: fonts.Medium,
+    color:Theme.BLACK_COLOR,
   },
   daysContainer: {
     marginTop: hp(1.2),
@@ -127,12 +129,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: wp(1),
-    borderRadius: wp(2),
     paddingHorizontal: wp(2),
     paddingVertical: wp(4),
+    borderRadius: wp(2),
   },
   selectedDay: {
     backgroundColor: '#0078C1',
+    borderRadius: wp(2),
   },
   dayText: {
     fontSize: hp(2),
