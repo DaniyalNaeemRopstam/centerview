@@ -20,6 +20,7 @@ import Circle from '../../components/backgroundCircle';
 import fonts from '../../utils/fonts';
 import moment from 'moment';
 import CustomButton from '../../components/buttons';
+import LocationIcon from '../../assets/SVG/locationIcon';
 
 export default function Dashboard(props?: any) {
   const [registeredEvents] = useState([
@@ -30,6 +31,11 @@ export default function Dashboard(props?: any) {
     },
     {
       name: 'Lunch Activity',
+      date: '2024-08-21T08:00:00.000000',
+      location: 'Talavera Restaurant',
+    },
+    {
+      name: 'Breakfast Activity',
       date: '2024-08-21T08:00:00.000000',
       location: 'Talavera Restaurant',
     },
@@ -273,6 +279,11 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       date: '2024-08-21T08:00:00.000000',
       location: 'Talavera Restaurant',
     },
+    {
+      name: 'Breakfast Activity',
+      date: '2024-08-21T08:00:00.000000',
+      location: 'Talavera Restaurant',
+    },
   ]);
 
   const renderRegisteredEvents = ({ item, index }: any) => {
@@ -285,8 +296,13 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName}>{item?.name}</Text>
         <Text style={styles.eventDate}>{formattedDate}</Text>
-        <Text style={styles.eventLocation}>{item?.location}</Text>
-
+        <View style={styles.locationContainer}>
+          <LocationIcon/>
+          <Text style={styles.eventLocation}>{item?.location}</Text>
+        </View>
+        <TouchableOpacity>
+          <Text style={styles.viewMap}>View on map</Text>
+        </TouchableOpacity>
         <CustomButton
           BtnContstyle={styles.unregisterBtn}
           text="Unregister Me!"
@@ -320,7 +336,14 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName}>{item?.name}</Text>
         <Text style={styles.eventDate}>{formattedDate}</Text>
-        <Text style={styles.eventLocation}>{item?.location}</Text>
+        <View style={styles.locationContainer}>
+          <LocationIcon/>
+          <Text style={styles.eventLocation}>{item?.location}</Text>
+        </View>
+        <TouchableOpacity>
+          <Text style={styles.viewMap}>View on map</Text>
+        </TouchableOpacity>
+
         <CustomButton
           BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
           text="Register"
@@ -337,7 +360,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
         style={styles.scrollViewStyle}
         contentContainerStyle={styles.scrollViewCont}>
         <View style={styles.topTilesCont}>
-          <View
+          <TouchableOpacity
             // onPress={() => props?.navigation?.navigate('EVENTS')}
             style={styles.topTile}>
             <TotalEvents fontSize={widthPercentageToDP(10)} />
@@ -346,7 +369,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
               <Text style={styles.total}>Total</Text>
               <Text style={styles.total}>Activities</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => props?.navigation?.navigate('SPEAKERS')}
@@ -360,15 +383,15 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           </TouchableOpacity>
         </View>
 
-        <View
-          // onPress={() => props?.navigation?.navigate('REGISTEREDEVENTS')}
+        <TouchableOpacity
+          onPress={() => props?.navigation?.navigate('REGISTEREDEVENTS')}
           style={[styles.topTile, styles.topBottomTiles]}>
           <RegisterGreen />
           <View>
             <Text style={styles.totalNumbers}>05</Text>
             <Text style={styles.total}>Registered Activities</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* <Text style={styles.registeredHeading}>Registered Activities</Text> */}
 
@@ -402,7 +425,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
         <FlatList
           horizontal
           renderItem={renderSpeakers}
-          data={speakers.slice(0, 4)}
+          data={speakers.slice(0, 8)}
           showsHorizontalScrollIndicator={false}
         />
 
@@ -503,19 +526,29 @@ const styles = StyleSheet.create({
   },
   eventDate: {
     fontSize: 12,
-    fontFamily: fonts.Bold,
+    fontFamily: fonts.Regular,
     color: Theme.BLACK_WASH,
     lineHeight: 19,
+  },
+  locationContainer:{
+    flexDirection:'row',
+    alignItems:'center',
   },
   eventLocation: {
     fontSize: 12,
     fontFamily: fonts.Regular,
     color: Theme.BLACK_WASH,
-    lineHeight: 19,
+    lineHeight: 18,
+  },
+  viewMap:{
+    fontSize: 12,
+    fontFamily: fonts.Regular,
+    color: Theme.ROLLER_COASTER_BLUE,
+    lineHeight: 18,
   },
   unregisterBtn: {
     marginTop: heightPercentageToDP(1.3),
-    height: heightPercentageToDP(3),
+    height: heightPercentageToDP(4),
     borderRadius: 8,
     backgroundColor: Theme.INTOXICATE_COLOR,
     alignItems: 'center',
@@ -544,7 +577,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    height: heightPercentageToDP(3),
+    height: heightPercentageToDP(3.8),
     backgroundColor: Theme.ROLLER_COASTER_BLUE,
     width: widthPercentageToDP(20),
   },

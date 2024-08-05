@@ -36,15 +36,12 @@ const styles = StyleSheet.create({
   imageCont: {
     borderWidth: 4,
     borderColor: Theme.WHITE_OUT,
-    shadowColor: Theme.PANTON_GREY,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 5,
-    elevation: 3,
     borderRadius: 100,
+    shadowColor: Theme.BLACK_COLOR,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
   },
   image: {
     width: 126,

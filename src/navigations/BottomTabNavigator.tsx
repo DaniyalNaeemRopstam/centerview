@@ -126,7 +126,7 @@ export default BottomTabNavigator
 
 const styles = StyleSheet.create({
   headerleftCont: { marginLeft: widthPercentageToDP(4), },
-  headerProfileImg: {width: 31, height: 31, borderRadius: 31 / 2 },
+  headerProfileImg: {width: widthPercentageToDP(10.5), height: widthPercentageToDP(10.5), borderRadius: widthPercentageToDP(10) / 2 },
   headerRightCont: {
     flexDirection: 'row',
     alignItems: 'center',

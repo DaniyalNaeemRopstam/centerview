@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Profile from '../screens/profile/profile';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
@@ -36,6 +36,22 @@ export default function UserNavigator() {
   const Stack = createStackNavigator<RootStackParamList>();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
+
+
+  const handleLogout = () => {
+    Alert.alert("Warning","Are you sure you want to logout?",
+      [
+        {
+          text:'No',
+        },
+        {
+          text:'Yes',
+          onPress: () =>  dispatch(saveUser({ isLoggedIn: false }))
+        },
+      ])  
+   
+  }
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -71,7 +87,7 @@ export default function UserNavigator() {
           headerRight: () => {
             return (
               <TouchableOpacity
-                onPress={() => dispatch(saveUser({ isLoggedIn: false }))}
+                onPress={handleLogout}
                 style={styles.headerRightCont}>
                 <Logout />
               </TouchableOpacity>

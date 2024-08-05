@@ -1,4 +1,4 @@
-import {FlatList, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, { useState } from 'react';
 import Circle from '../../components/backgroundCircle';
 import CalendarComponent from '../../components/calendarComponent';
@@ -43,6 +43,7 @@ export default function RegisteredEvents() {
       date: '2024-08-21T08:00:00.000000',
       location: 'Talavera Restaurant',
     },
+    
   ]);
 
   const renderEvents = ({item, index}: any) => {
@@ -59,6 +60,9 @@ export default function RegisteredEvents() {
           <LocationIcon/>
           <Text style={styles.eventLocation}>{item?.location}</Text>
         </View>
+        <TouchableOpacity>
+          <Text style={styles.viewMap}>View on map</Text>
+        </TouchableOpacity>
         <CustomButton
           BtnContstyle={styles.unregisterBtn}
           text="Unregister Me!"
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize:18,
     fontFamily:fonts.Medium,
     padding:wp(5),
-    paddingBottom:wp(1),
+    paddingBottom:wp(0),
   },
   eventCard: {
     marginRight: 8,
@@ -121,7 +125,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   contentContainerStyle:{
-    padding:wp(5)
+    paddingHorizontal:wp(5),
+    paddingVertical:wp(1),
   },
   eventName: {
     fontSize: 14,
@@ -130,8 +135,8 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
   eventDate: {
-    fontSize: 14,
-    fontFamily: fonts.SemiBold,
+    fontSize: 12,
+    fontFamily: fonts.Regular,
     color: Theme.BLACK_WASH,
     lineHeight: 19,
   },
@@ -146,9 +151,15 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     marginLeft:wp(2)
   },
+  viewMap:{
+    fontSize: 12,
+    fontFamily: fonts.Regular,
+    color: Theme.ROLLER_COASTER_BLUE,
+    lineHeight: 18,
+  },
   unregisterBtn: {
     marginTop: hp(1.3),
-    height: hp(3.5),
+    height: hp(4),
     borderRadius: 8,
     backgroundColor: Theme.INTOXICATE_COLOR,
     alignItems: 'center',

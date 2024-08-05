@@ -142,9 +142,9 @@ const styles = StyleSheet.create({
   },
   selectedDay: {
     width: wp(10.8),
-    height: wp(16),
+    height: wp(18),
     backgroundColor: '#0078C1',
-    borderRadius: wp(2),
+    borderRadius: wp(3),
   },
   dayText: {
     fontSize: hp(2),
@@ -152,9 +152,9 @@ const styles = StyleSheet.create({
   },
   selectedDayText: {
     color: Theme.WHITE_COLOR,
-    fontSize: hp(2),
-    fontFamily: fonts.SemiBold,
-    lineHeight: hp(2.3),
+    fontSize: hp(2.5),
+    fontFamily: fonts.Bold,
+    lineHeight: hp(2.7),
   },
   dayText2: {
     fontSize: hp(1.5),
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: hp(1.5),
     fontFamily: fonts.Regular,
+    lineHeight: hp(1.7),
   },
 });
 

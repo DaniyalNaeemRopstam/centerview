@@ -8,7 +8,7 @@ const ResortMaps = () => {
             <Image
                 source={Maps}
                 style={{ flex: 1, width:'100%' }}
-                resizeMode='cover'
+                resizeMode='stretch'
             />
     )
 }

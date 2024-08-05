@@ -14,7 +14,8 @@ export default function Profile() {
         <Image
           source={require('../../assets/speakers/Alex.png')}
           style={styles.image}
-          resizeMode='contain'
+          resizeMode='cover'
+        
         />
       </View>
       <Text style={styles.profileName}>Kathrine Langford</Text>
@@ -68,22 +69,19 @@ const styles = StyleSheet.create({
   imageCont: {
     width:widthPercentageToDP(30),
     height:widthPercentageToDP(30),
-    borderWidth: 4,
+    borderWidth: widthPercentageToDP(1),
     borderColor: Theme.WHITE_OUT,
-    shadowColor: Theme.PANTON_GREY,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 5,
-    elevation: 3,
     borderRadius: 100,
+    shadowColor: Theme.BLACK_COLOR,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 100 / 2,
+    width: widthPercentageToDP(28),
+    height: widthPercentageToDP(28),
+    borderRadius: widthPercentageToDP(30) / 2,
   },
   profileName: {
     color: Theme.BLACK_COLOR,
@@ -115,13 +113,15 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentageToDP(1.5),
   },
   heading: {
-    fontSize: 16,
+    fontSize: widthPercentageToDP(4),
+    // fontSize:16,
     fontFamily: fonts.SemiBold,
     color: Theme.JET_COLOR,
     lineHeight: 24,
   },
   headingRight: {
-    fontSize: 14,
+    fontSize:  widthPercentageToDP(3.5),
+    // fontSize:14,
     fontFamily: fonts.Medium,
     color: Theme.ROLLER_COASTER_BLUE,
   },

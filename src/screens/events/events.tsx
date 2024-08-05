@@ -1,4 +1,4 @@
-import { FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import Circle from '../../components/backgroundCircle';
 import CalendarComponent from '../../components/calendarComponent';
@@ -100,6 +100,9 @@ export default function Events() {
           <LocationIcon />
           <Text style={styles.eventLocation}>{item?.location}</Text>
         </View>
+        <TouchableOpacity>
+          <Text style={styles.viewMap}>View on map</Text>
+        </TouchableOpacity>
         {item?.suggestedAttire && (
           <Text style={[styles.suggestedAttire, { fontFamily: fonts.Medium }]}>Suggested Attire:
             <Text style={styles.suggestedAttire} >
@@ -181,7 +184,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   contentContainerStyle: {
-    padding: wp(5),
+    paddingHorizontal:wp(5),
+    paddingVertical:wp(1),
   },
   eventName: {
     fontSize: 16,
@@ -206,6 +210,12 @@ const styles = StyleSheet.create({
     color: Theme.BLACK_WASH,
     lineHeight: 21,
     marginLeft: wp(2),
+  },
+  viewMap:{
+    fontSize: 12,
+    fontFamily: fonts.Regular,
+    color: Theme.ROLLER_COASTER_BLUE,
+    lineHeight: 18,
   },
   suggestedAttire: {
     fontSize: 12,
