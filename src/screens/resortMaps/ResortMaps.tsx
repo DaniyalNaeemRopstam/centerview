@@ -1,6 +1,5 @@
 import { Image, ImageComponent, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import WebView from 'react-native-webview'
 import Maps from '../../assets/Maps2.png'
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
