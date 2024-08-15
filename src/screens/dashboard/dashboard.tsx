@@ -25,27 +25,28 @@ import LocationIcon from '../../assets/SVG/locationIcon';
 import axiosWrapper from '../../services/AxiosWrapper';
 import { API_URLS } from '../../services/apiPathList';
 import { useSelector } from 'react-redux';
+import AlertService from '../../services/AlertService';
 
 export default function Dashboard(props?: any) {
 
   const token = useSelector((state:any) => state.login.token);
-  const [registeredEvents] = useState([
-    {
-      name: 'Welcome Brunch',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-    {
-      name: 'Lunch Activity',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-    {
-      name: 'Breakfast Activity',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-  ]);
+  // const [registeredEvents] = useState([
+  //   {
+  //     name: 'Welcome Brunch',
+  //     date: '2024-08-21T08:00:00.000000',
+  //     location: 'Talavera Restaurant',
+  //   },
+  //   {
+  //     name: 'Lunch Activity',
+  //     date: '2024-08-21T08:00:00.000000',
+  //     location: 'Talavera Restaurant',
+  //   },
+  //   {
+  //     name: 'Breakfast Activity',
+  //     date: '2024-08-21T08:00:00.000000',
+  //     location: 'Talavera Restaurant',
+  //   },
+  // ]);
 
   const [speakers] = useState([
     {
@@ -275,24 +276,28 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   ]);
 
   const [loader, setLoader] = useState(false)
+  const [speakerLoader, setSpeakersLoader] = useState(false)
   const [upcommingEventsloader, setUpcommingEventsLoader] = useState(false)
+  const [registerdEventsloader, setRegisterdEventsLoader] = useState(false)
   const [speakerData, setSpeakersData] = useState([]);
   const [upcommingEvents, setUpcommingEvents] = useState([]);
+  const [registeredEvents, setRegisteredEvents] = useState([]);
 
   useEffect(() => {
     getSpeakersDetail();
     getUpcommingEvents();
+    getRegisteredEvents()
   }, [])
 
   const getSpeakersDetail = async () => {
     try {
-      setLoader(true)
+      setSpeakersLoader(true)
       let response = await axiosWrapper('GET', API_URLS.GET_SPEAKERS);
       setSpeakersData(response);
 
     } catch (e) {
     } finally {
-      setLoader(false)
+      setSpeakersLoader(false)
     }
 
   }
@@ -310,6 +315,18 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
 
   }
 
+  const getRegisteredEvents = async () => {
+    try {
+      setRegisterdEventsLoader(true)
+      let response = await axiosWrapper('GET', API_URLS.GET_UPCOMMING_EVENTS,null,token,false,'json',false);
+      setRegisteredEvents(response?.data?.activities);
+
+    } catch (e) {
+    } finally {
+      setRegisterdEventsLoader(false)
+    }
+
+  }
 
 
 
@@ -331,8 +348,28 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     },
   ]);
 
+
+
+  const unRegisterEvents = async (event_id: any) => {
+    try {
+      let data = { event_id, }
+      setLoader(true)
+      let response = await axiosWrapper('POST', `${API_URLS.UNREGISTER_EVENTS}`, data, token, false, 'json', true);
+      if (response.data) {
+        AlertService.toastPrompt(response?.data?.success, 'success')
+        let events = registeredEvents.filter((item: any) => item.id !== event_id)
+        setRegisteredEvents(events)
+      }
+
+    } catch (e) {
+    } finally {
+      setLoader(false)
+    }
+
+  }
+
   const renderRegisteredEvents = ({ item, index }: any) => {
-    const isoString = item?.date;
+    const isoString = item?.datetime;
     const formattedDate = moment(isoString).format(
       'DD MMMM, YYYY [at] HH:mm A',
     );
@@ -341,10 +378,11 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName}>{item?.activity}</Text>
         <Text style={styles.eventDate}>{formattedDate}</Text>
+        {item?.location && 
         <View style={styles.locationContainer}>
           <LocationIcon />
           <Text style={styles.eventLocation}>{item?.location}</Text>
-        </View>
+        </View>}
         <TouchableOpacity>
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
@@ -352,6 +390,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           BtnContstyle={styles.unregisterBtn}
           text="Unregister Me!"
           textStyle={styles.unregisterTxt}
+          onPress={() => { unRegisterEvents(item.id) }}
         />
       </View>
     );
@@ -371,12 +410,32 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     );
   };
 
+
+
+
+  const registerEvents = async (event_id: any) => {
+    try {
+      let data = { event_id, is_guest: true }
+      setLoader(true)
+      let response = await axiosWrapper('POST', `${API_URLS.REGISTER_EVENTS}`, data, token, false, 'json', true);
+      if (response.data) {
+        AlertService.toastPrompt(response?.data?.success,'success')
+        let events = upcommingEvents.filter((item: any) => item.id !== event_id)
+        setUpcommingEvents(events)
+      }
+
+    } catch (e) {
+    } finally {
+      setLoader(false)
+    }
+
+  }
   const renderEvents = ({ item, index }: any) => {
     const isoString = item?.datetime;
     const formattedDate = moment(isoString).format(
       'DD MMMM, YYYY [at] HH:mm A',
     );
-console.log(item)
+
     return (
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName}>{item?.activity}</Text>
@@ -393,6 +452,7 @@ console.log(item)
           BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
           text="Register"
           textStyle={styles.unregisterTxt}
+          onPress={() => { registerEvents(item.id) }}
         />
       </View>
     );
@@ -401,6 +461,12 @@ console.log(item)
   return (
     <>
       <Circle />
+      {
+        loader &&
+        <View style={styles.loaderComp}>
+          <ActivityIndicator size={'large'} color={Theme.WHITE_COLOR} />
+        </View>
+      }
       <ScrollView
         style={styles.scrollViewStyle}
         contentContainerStyle={styles.scrollViewCont}>
@@ -453,9 +519,11 @@ console.log(item)
 
         <FlatList
           horizontal
-          data={registeredEvents.slice(0, 3)}
+          data={registeredEvents?.length >=3 ? registeredEvents.slice(0, 3) : registeredEvents}
           renderItem={renderRegisteredEvents}
           showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={registerdEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{flex:1}} /> : <Text>No registered events found</Text>}
+          contentContainerStyle={styles.renderSpeakersContentContainerStyle}
         />
 
         <View style={styles.headingCont}>
@@ -472,7 +540,7 @@ console.log(item)
           renderItem={renderSpeakers}
           data={speakerData?.length >= 8 ? speakerData.slice(0, 8) : speakerData }
           showsHorizontalScrollIndicator={false}
-          ListEmptyComponent={loader ? <ActivityIndicator size={'large'} color={'black'} style={{flex:1}} /> : <Text>No Speaker found</Text>}
+          ListEmptyComponent={speakerLoader ? <ActivityIndicator size={'large'} color={'black'} style={{flex:1}} /> : <Text>No Speaker found</Text>}
           contentContainerStyle={styles.renderSpeakersContentContainerStyle}
         />
 
@@ -505,6 +573,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthPercentageToDP(3),
     marginTop: heightPercentageToDP(3),
     paddingBottom: heightPercentageToDP(10),
+  },
+  loaderComp: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
   },
   topTilesCont: {
     flexDirection: 'row',
@@ -554,6 +633,7 @@ const styles = StyleSheet.create({
   },
   eventCard: {
     marginRight: 8,
+    maxWidth:widthPercentageToDP(75),
     backgroundColor: Theme.WHITE_COLOR,
     borderRadius: 16,
     paddingHorizontal: widthPercentageToDP(4),

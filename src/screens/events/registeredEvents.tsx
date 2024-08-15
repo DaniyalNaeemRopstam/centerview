@@ -1,5 +1,5 @@
-import {FlatList, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, { useState } from 'react';
+import { ActivityIndicator, FlatList, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Circle from '../../components/backgroundCircle';
 import CalendarComponent from '../../components/calendarComponent';
 import moment from 'moment';
@@ -8,6 +8,10 @@ import fonts from '../../utils/fonts';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import CustomButton from '../../components/buttons';
 import LocationIcon from '../../assets/SVG/locationIcon';
+import axiosWrapper from '../../services/AxiosWrapper';
+import { API_URLS } from '../../services/apiPathList';
+import { useSelector } from 'react-redux';
+import AlertService from '../../services/AlertService';
 
 const months: string[] = [
   'January',
@@ -28,9 +32,14 @@ const months: string[] = [
 
 
 export default function RegisteredEvents() {
-  const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month()-1]}, ${moment().year()}`)
+  const token = useSelector((state: any) => state.login.token);
+  const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month() - 1]}, ${moment().year()}`)
+  const [dateForAPI, setDateForAPI] = useState(`${moment().year()}-${moment().month()}-${moment().date()}`)
+
   const handleDateChange = (day: number, month: number, year: number) => {
-    setSelectedDate(`${day} ${months[month-1]}, ${year}`);
+    setSelectedDate(`${day} ${months[month - 1]}, ${year}`);
+    setDateForAPI(`${year}-${month}-${day}`)
+    setRegisteredEvents([])
   };
   const [activities] = useState([
     {
@@ -43,23 +52,73 @@ export default function RegisteredEvents() {
       date: '2024-08-21T08:00:00.000000',
       location: 'Talavera Restaurant',
     },
-    
+
   ]);
 
-  const renderEvents = ({item, index}: any) => {
-    const isoString = item?.date;
+  const [registeredEventsloader, setRegisteredEventsLoader] = useState(false)
+  const [registeredEvents, setRegisteredEvents] = useState([]);
+  const [loader, setLoader] = useState(false)
+
+
+  useEffect(() => {
+    getRegisteredEvents()
+  }, [dateForAPI])
+
+
+  const getRegisteredEvents = async () => {
+    try {
+      setRegisteredEventsLoader(true)
+      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?date=${dateForAPI}`, null, token, false, 'json', false);
+
+      setRegisteredEvents(response?.data?.activities);
+
+    } catch (e) {
+    } finally {
+      setRegisteredEventsLoader(false)
+    }
+
+  }
+
+  const unRegisterEvents = async (event_id: any) => {
+    try {
+      let data = { event_id, }
+      setLoader(true)
+      let response = await axiosWrapper('POST', `${API_URLS.UNREGISTER_EVENTS}`, data, token, false, 'json', true);
+      if (response.data) {
+        AlertService.toastPrompt(response?.data?.success, 'success')
+        let events = registeredEvents.filter((item: any) => item.id !== event_id)
+        setRegisteredEvents(events)
+      }
+
+    } catch (e) {
+    } finally {
+      setLoader(false)
+    }
+
+  }
+
+
+
+
+
+
+
+  const renderEvents = ({ item, index }: any) => {
+    const isoString = item?.datetime;
     const formattedDate = moment(isoString).format(
       'DD MMMM, YYYY [at] HH:mm A',
     );
 
     return (
       <View key={index} style={styles.eventCard}>
-        <Text style={styles.eventName}>{item?.name}</Text>
+        <Text style={styles.eventName}>{item?.activity}</Text>
         <Text style={styles.eventDate}>{formattedDate}</Text>
-        <View style={styles.locationContainer}>
-          <LocationIcon/>
-          <Text style={styles.eventLocation}>{item?.location}</Text>
-        </View>
+        {
+          item?.location &&
+          <View style={styles.locationContainer}>
+            <LocationIcon />
+            <Text style={styles.eventLocation}>{item?.location}</Text>
+          </View>}
         <TouchableOpacity>
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
@@ -67,31 +126,40 @@ export default function RegisteredEvents() {
           BtnContstyle={styles.unregisterBtn}
           text="Unregister Me!"
           textStyle={styles.unregisterTxt}
+          onPress={() => { unRegisterEvents(item.id) }}
         />
       </View>
     );
   };
 
-    
+
   return (
     <>
       <Circle />
+      {
+        loader &&
+        <View style={styles.loaderComp}>
+          <ActivityIndicator size={'large'} color={Theme.WHITE_COLOR} />
+        </View>
+      }
       <SafeAreaView style={styles.container}>
-      <CalendarComponent
-        initialMonth={moment().month() + 1}
-        initialYear={moment().year()}
-        onDateChange={handleDateChange}
-      />
-
-      <Text style={styles.date}>{selectedDate}</Text>
-      
-      <FlatList
-          renderItem={renderEvents}
-          data={activities.slice(0, 3)}
-          contentContainerStyle={styles.contentContainerStyle}
+        <CalendarComponent
+          initialMonth={moment().month() + 1}
+          initialYear={moment().year()}
+          onDateChange={handleDateChange}
         />
 
-    </SafeAreaView>
+        <Text style={styles.date}>{selectedDate}</Text>
+
+        <FlatList
+          renderItem={renderEvents}
+          data={registeredEvents}
+          contentContainerStyle={styles.contentContainerStyle}
+          ListEmptyComponent={registeredEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{ flex: 1 }} /> : <Text>No registered events found</Text>}
+
+        />
+
+      </SafeAreaView>
     </>
   );
 }
@@ -99,14 +167,25 @@ export default function RegisteredEvents() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop:Platform.OS === 'android' ? wp(12): null
+    marginTop: Platform.OS === 'android' ? wp(12) : null
   },
-  date:{
-    color:Theme.BLACK_COLOR,
-    fontSize:18,
-    fontFamily:fonts.Medium,
-    padding:wp(5),
-    paddingBottom:wp(0),
+  loaderComp: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  date: {
+    color: Theme.BLACK_COLOR,
+    fontSize: 18,
+    fontFamily: fonts.Medium,
+    padding: wp(5),
+    paddingBottom: wp(0),
   },
   eventCard: {
     marginRight: 8,
@@ -124,9 +203,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  contentContainerStyle:{
-    paddingHorizontal:wp(5),
-    paddingVertical:wp(1),
+  contentContainerStyle: {
+    paddingHorizontal: wp(5),
+    paddingVertical: wp(1),
   },
   eventName: {
     fontSize: 14,
@@ -140,18 +219,18 @@ const styles = StyleSheet.create({
     color: Theme.BLACK_WASH,
     lineHeight: 19,
   },
-  locationContainer:{
-    flexDirection:'row',
-    alignItems:'center',
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   eventLocation: {
     fontSize: 12,
     fontFamily: fonts.Regular,
     color: Theme.BLACK_WASH,
     lineHeight: 19,
-    marginLeft:wp(2)
+    marginLeft: wp(2)
   },
-  viewMap:{
+  viewMap: {
     fontSize: 12,
     fontFamily: fonts.Regular,
     color: Theme.ROLLER_COASTER_BLUE,
@@ -166,7 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: wp(80),
   },
-  registerBtn: {backgroundColor: Theme.ROLLER_COASTER_BLUE},
+  registerBtn: { backgroundColor: Theme.ROLLER_COASTER_BLUE },
   unregisterTxt: {
     color: Theme.WHITE_COLOR,
     fontFamily: fonts.Medium,

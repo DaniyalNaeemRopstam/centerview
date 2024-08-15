@@ -11,6 +11,7 @@ import LocationIcon from '../../assets/SVG/locationIcon';
 import axiosWrapper from '../../services/AxiosWrapper';
 import { API_URLS } from '../../services/apiPathList';
 import { useSelector } from 'react-redux';
+import AlertService from '../../services/AlertService';
 
 const months: string[] = [
   'January',
@@ -28,12 +29,13 @@ const months: string[] = [
 ];
 
 export default function Events() {
-  const token = useSelector((state:any) => state.login.token);
+  const token = useSelector((state: any) => state.login.token);
   const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month() - 1]}, ${moment().year()}`)
-  const [dateForAPI,setDateForAPI] = useState(`${moment().year()}-${moment().month() - 1}-${moment().date()}`)
+  const [dateForAPI, setDateForAPI] = useState(`${moment().year()}-${moment().month()}-${moment().date()}`)
   const handleDateChange = (day: number, month: number, year: number) => {
     setSelectedDate(`${day} ${months[month - 1]}, ${year}`);
-    setDateForAPI(`${year}-${month-1}-${day}`)
+    setDateForAPI(`${year}-${month}-${day}`)
+    setUpcommingEvents([])
   };
   const [activities] = useState([
     {
@@ -69,18 +71,19 @@ export default function Events() {
   ]);
   const [upcommingEventsloader, setUpcommingEventsLoader] = useState(false)
   const [upcommingEvents, setUpcommingEvents] = useState([]);
+  const [loader, setLoader] = useState(false)
 
 
-  useEffect(()=>{
+
+  useEffect(() => {
     getUpcommingEvents()
-  },[dateForAPI])
+  }, [dateForAPI])
 
 
   const getUpcommingEvents = async () => {
     try {
       setUpcommingEventsLoader(true)
-      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}${dateForAPI}`,null,token,false,'json',false);
-      console.log(response?.data?.activities[0])
+      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?date=${dateForAPI}`, null, token, false, 'json', false);
       setUpcommingEvents(response?.data?.activities);
 
     } catch (e) {
@@ -90,29 +93,23 @@ export default function Events() {
 
   }
 
+  const registerEvents = async (event_id: any) => {
+    try {
+      let data = { event_id, is_guest: true }
+      setLoader(true)
+      let response = await axiosWrapper('POST', `${API_URLS.REGISTER_EVENTS}`, data, token, false, 'json', true);
+      if (response.data) {
+        AlertService.toastPrompt(response?.data?.success,'success')
+        let events = upcommingEvents.filter((item: any) => item.id !== event_id)
+        setUpcommingEvents(events)
+      }
 
-  // const renderEvents = ({item, index}: any) => {
-  //   const isoString = item?.date;
-  //   const formattedDate = moment(isoString).format(
-  //     'DD MMMM, YYYY [at] HH:mm A',
-  //   );
+    } catch (e) {
+    } finally {
+      setLoader(false)
+    }
 
-  //   return (
-  //     <View key={index} style={styles.eventCard}>
-  //       <Text style={styles.eventName}>{item?.name}</Text>
-  //       <Text style={styles.eventDate}>{formattedDate}</Text>
-  //       <View style={styles.locationContainer}>
-  //         <LocationIcon/>
-  //         <Text style={styles.eventLocation}>{item?.location}</Text>
-  //       </View>
-  //       <CustomButton
-  //         BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
-  //         text="Register"
-  //         textStyle={styles.unregisterTxt}
-  //       />
-  //     </View>
-  //   );
-  // };
+  }
 
 
   const renderEvents = ({ item, index }: any) => {
@@ -125,10 +122,11 @@ export default function Events() {
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName}>{item?.activity}</Text>
         <Text style={styles.eventTime}>Time: {formattedDate}</Text>
-        <View style={styles.locationContainer}>
-          <LocationIcon />
-          <Text style={styles.eventLocation}>{item?.location}</Text>
-        </View>
+        {item?.location &&
+          <View style={styles.locationContainer}>
+            <LocationIcon />
+            <Text style={styles.eventLocation}>{item?.location}</Text>
+          </View>}
         <TouchableOpacity>
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
@@ -146,7 +144,7 @@ export default function Events() {
               <Text key={idx} style={[styles.speackerName, { fontFamily: fonts.Medium }]}>{speaker.name} <Text style={styles.speackerName} >
                 {speaker.bio}
               </Text>
-            </Text>
+              </Text>
             ))}
           </View>
         )}
@@ -154,6 +152,7 @@ export default function Events() {
           BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
           text="Register"
           textStyle={styles.unregisterTxt}
+          onPress={() => { registerEvents(item.id) }}
         />
       </View>
     );
@@ -164,6 +163,12 @@ export default function Events() {
   return (
     <>
       <Circle />
+      {
+        loader &&
+        <View style={styles.loaderComp}>
+          <ActivityIndicator size={'large'} color={Theme.WHITE_COLOR} />
+        </View>
+      }
       <SafeAreaView style={styles.container}>
         <CalendarComponent
           initialMonth={moment().month() + 1}
@@ -177,7 +182,7 @@ export default function Events() {
           renderItem={renderEvents}
           data={upcommingEvents}
           contentContainerStyle={styles.contentContainerStyle}
-          ListEmptyComponent={upcommingEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{flex:1}} /> : <Text>No upcomming events found</Text>}
+          ListEmptyComponent={upcommingEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{ flex: 1 }} /> : <Text>No upcomming events found</Text>}
         />
 
       </SafeAreaView>
@@ -188,6 +193,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: Platform.OS === 'android' ? wp(12) : null,
+  },
+  loaderComp: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
   },
   date: {
     color: Theme.BLACK_COLOR,
@@ -214,8 +230,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   contentContainerStyle: {
-    paddingHorizontal:wp(5),
-    paddingVertical:wp(1),
+    paddingHorizontal: wp(5),
+    paddingVertical: wp(1),
   },
   eventName: {
     fontSize: 16,
@@ -241,7 +257,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     marginLeft: wp(2),
   },
-  viewMap:{
+  viewMap: {
     fontSize: 12,
     fontFamily: fonts.Regular,
     color: Theme.ROLLER_COASTER_BLUE,
