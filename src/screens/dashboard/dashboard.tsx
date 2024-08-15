@@ -28,7 +28,7 @@ import { useSelector } from 'react-redux';
 import AlertService from '../../services/AlertService';
 
 export default function Dashboard(props?: any) {
-
+  const user = useSelector((state:any) => state.login.user);
   const token = useSelector((state:any) => state.login.token);
   // const [registeredEvents] = useState([
   //   {
@@ -318,7 +318,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const getRegisteredEvents = async () => {
     try {
       setRegisterdEventsLoader(true)
-      let response = await axiosWrapper('GET', API_URLS.GET_UPCOMMING_EVENTS,null,token,false,'json',false);
+      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?register=${user?.id}`,null,token,false,'json',false);
       setRegisteredEvents(response?.data?.activities);
 
     } catch (e) {

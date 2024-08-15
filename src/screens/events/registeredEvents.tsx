@@ -32,6 +32,7 @@ const months: string[] = [
 
 
 export default function RegisteredEvents() {
+  const user = useSelector((state:any) => state.login.user);
   const token = useSelector((state: any) => state.login.token);
   const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month() - 1]}, ${moment().year()}`)
   const [dateForAPI, setDateForAPI] = useState(`${moment().year()}-${moment().month()}-${moment().date()}`)
@@ -64,11 +65,10 @@ export default function RegisteredEvents() {
     getRegisteredEvents()
   }, [dateForAPI])
 
-
   const getRegisteredEvents = async () => {
     try {
       setRegisteredEventsLoader(true)
-      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?date=${dateForAPI}`, null, token, false, 'json', false);
+      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?date=${dateForAPI}&register=${user?.id}`, null, token, false, 'json', false);
 
       setRegisteredEvents(response?.data?.activities);
 
