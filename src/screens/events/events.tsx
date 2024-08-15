@@ -118,7 +118,7 @@ export default function Events() {
   const renderEvents = ({ item, index }: any) => {
     if (!item) return null;
 
-    const isoString = item?.date;
+    const isoString = item?.datetime;
     const formattedDate = moment(isoString).format('DD MMMM, YYYY [at] HH:mm A');
 
     return (
