@@ -18,7 +18,6 @@ export default function Profile() {
           source={{uri: user?.profile_img ||  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}
           style={styles.image}
           resizeMode='cover'
-        
         />
       </View>
       <Text style={styles.profileName}>{user?.displayName || '-'}</Text>
@@ -54,7 +53,7 @@ export default function Profile() {
         </View>
         <Text style={styles.bioHeading}>Biography</Text>
         <Text style={styles.bioTxt}>
-          {user.biography}
+          {user?.biography}
         </Text>
       </View>
     </ScrollView>

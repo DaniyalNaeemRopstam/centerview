@@ -7,6 +7,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  PermissionsAndroid,
+  Alert,
+  Platform,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import TotalEvents from '../../assets/SVG/totalEvents';
@@ -26,10 +29,14 @@ import axiosWrapper from '../../services/AxiosWrapper';
 import { API_URLS } from '../../services/apiPathList';
 import { useSelector } from 'react-redux';
 import AlertService from '../../services/AlertService';
+import messaging from '@react-native-firebase/messaging';
+
+
+
 
 export default function Dashboard(props?: any) {
-  const user = useSelector((state:any) => state.login.user);
-  const token = useSelector((state:any) => state.login.token);
+  const user = useSelector((state: any) => state.login.user);
+  const token = useSelector((state: any) => state.login.token);
   // const [registeredEvents] = useState([
   //   {
   //     name: 'Welcome Brunch',
@@ -283,11 +290,69 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const [upcommingEvents, setUpcommingEvents] = useState([]);
   const [registeredEvents, setRegisteredEvents] = useState([]);
 
+
   useEffect(() => {
     getSpeakersDetail();
     getUpcommingEvents();
     getRegisteredEvents()
   }, [])
+
+  useEffect(()=>{
+    requestUserPermission()
+  },[])
+
+
+  const requestUserPermission = async () => {
+    try {
+      let enabled;
+
+      if (Platform.OS === 'ios') {
+        const authStatus = await messaging().requestPermission();
+        enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      } else if (Platform.OS === 'android') {
+        if (Platform.Version >= 33) {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+          );
+          enabled = granted === PermissionsAndroid.RESULTS.GRANTED;
+        } else {
+          enabled = true; 
+        }
+      }
+
+      if (enabled) {
+        console.log('Notification permission granted.');
+        await getFCMToken(); 
+      } else {
+        Alert.alert("Permission denied", "You won't receive notifications");
+      }
+    } catch (error) {
+      console.error('Failed to request permission or get FCM token:', error);
+    }
+  };
+
+  const getFCMToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      if (token) {
+        console.log('FCM Token:', token);
+        // Store the token in your backend or local storage as needed
+      } else {
+        console.warn('Failed to get FCM token');
+      }
+    } catch (error) {
+      console.error('Error getting FCM token:', error);
+    }
+  };
+
+
+
+
+
+
+
 
   const getSpeakersDetail = async () => {
     try {
@@ -305,7 +370,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const getUpcommingEvents = async () => {
     try {
       setUpcommingEventsLoader(true)
-      let response = await axiosWrapper('GET', API_URLS.GET_UPCOMMING_EVENTS,null,token,false,'json',false);
+      let response = await axiosWrapper('GET', API_URLS.GET_UPCOMMING_EVENTS, null, token, false, 'json', false);
       setUpcommingEvents(response?.data?.activities);
 
     } catch (e) {
@@ -318,7 +383,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const getRegisteredEvents = async () => {
     try {
       setRegisterdEventsLoader(true)
-      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?register=${user?.id}`,null,token,false,'json',false);
+      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?register=${user?.id}`, null, token, false, 'json', false);
       setRegisteredEvents(response?.data?.activities);
 
     } catch (e) {
@@ -378,11 +443,11 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName} numberOfLines={1}>{item?.activity}</Text>
         <Text style={styles.eventDate}>{formattedDate}</Text>
-        {item?.location && 
-        <View style={styles.locationContainer}>
-          <LocationIcon />
-          <Text style={styles.eventLocation} numberOfLines={1} >{item?.location}</Text>
-        </View>}
+        {item?.location &&
+          <View style={styles.locationContainer}>
+            <LocationIcon />
+            <Text style={styles.eventLocation} numberOfLines={1} >{item?.location}</Text>
+          </View>}
         <TouchableOpacity>
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
@@ -402,9 +467,9 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
         key={index}
         style={styles.speakerCard}
         onPress={() =>
-          props?.navigation?.navigate('SPEAKERSDETAIL', { speaker: {...item, detail:item?.content?.rendered} })
+          props?.navigation?.navigate('SPEAKERSDETAIL', { speaker: { ...item, detail: item?.content?.rendered } })
         }>
-        <Image source={{uri:item?.jetpack_featured_media_url || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }} style={styles.speakerImg} />
+        <Image source={{ uri: item?.jetpack_featured_media_url || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }} style={styles.speakerImg} />
         <Text style={styles.speakerName} numberOfLines={2} >{item?.title?.rendered}</Text>
       </TouchableOpacity>
     );
@@ -419,7 +484,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       setLoader(true)
       let response = await axiosWrapper('POST', `${API_URLS.REGISTER_EVENTS}`, data, token, false, 'json', true);
       if (response.data) {
-        AlertService.toastPrompt(response?.data?.success,'success')
+        AlertService.toastPrompt(response?.data?.success, 'success')
         let events = upcommingEvents.filter((item: any) => item.id !== event_id)
         setUpcommingEvents(events)
       }
@@ -519,10 +584,10 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
 
         <FlatList
           horizontal
-          data={registeredEvents?.length >=3 ? registeredEvents.slice(0, 3) : registeredEvents}
+          data={registeredEvents?.length >= 3 ? registeredEvents.slice(0, 3) : registeredEvents}
           renderItem={renderRegisteredEvents}
           showsHorizontalScrollIndicator={false}
-          ListEmptyComponent={registerdEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{flex:1}} /> : <Text>No registered events found</Text>}
+          ListEmptyComponent={registerdEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{ flex: 1 }} /> : <Text>No registered events found</Text>}
           contentContainerStyle={styles.renderSpeakersContentContainerStyle}
         />
 
@@ -538,9 +603,9 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
         <FlatList
           horizontal
           renderItem={renderSpeakers}
-          data={speakerData?.length >= 8 ? speakerData.slice(0, 8) : speakerData }
+          data={speakerData?.length >= 8 ? speakerData.slice(0, 8) : speakerData}
           showsHorizontalScrollIndicator={false}
-          ListEmptyComponent={speakerLoader ? <ActivityIndicator size={'large'} color={'black'} style={{flex:1}} /> : <Text>No Speaker found</Text>}
+          ListEmptyComponent={speakerLoader ? <ActivityIndicator size={'large'} color={'black'} style={{ flex: 1 }} /> : <Text>No Speaker found</Text>}
           contentContainerStyle={styles.renderSpeakersContentContainerStyle}
         />
 
@@ -556,9 +621,9 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
         <FlatList
           horizontal
           renderItem={renderEvents}
-          data={ upcommingEvents?.length >=3 ? upcommingEvents.slice(0, 3) : upcommingEvents}
+          data={upcommingEvents?.length >= 3 ? upcommingEvents.slice(0, 3) : upcommingEvents}
           showsHorizontalScrollIndicator={false}
-          ListEmptyComponent={upcommingEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{flex:1}} /> : <Text>No upcomming events found</Text>}
+          ListEmptyComponent={upcommingEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{ flex: 1 }} /> : <Text>No upcomming events found</Text>}
           contentContainerStyle={styles.renderSpeakersContentContainerStyle}
 
         />
@@ -633,7 +698,7 @@ const styles = StyleSheet.create({
   },
   eventCard: {
     marginRight: 8,
-    maxWidth:widthPercentageToDP(70),
+    maxWidth: widthPercentageToDP(70),
     backgroundColor: Theme.WHITE_COLOR,
     borderRadius: 16,
     paddingHorizontal: widthPercentageToDP(4),
@@ -717,9 +782,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 24,
   },
-  renderSpeakersContentContainerStyle:{
-    minHeight:heightPercentageToDP(12),
-    flexGrow:1,
+  renderSpeakersContentContainerStyle: {
+    minHeight: heightPercentageToDP(12),
+    flexGrow: 1,
   },
   speakerCard: {
     marginRight: 20,

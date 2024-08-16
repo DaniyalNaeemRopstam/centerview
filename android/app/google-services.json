@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "982737544972",
+    "project_id": "centerview-34e82",
+    "storage_bucket": "centerview-34e82.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982737544972:android:fa914274949a020fac8b29",
+        "android_client_info": {
+          "package_name": "com.center_view"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcT-jDJu8bzaR5T-xPI-rsQbIPm18RxMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
