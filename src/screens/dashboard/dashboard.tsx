@@ -376,12 +376,12 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
 
     return (
       <View key={index} style={styles.eventCard}>
-        <Text style={styles.eventName}>{item?.activity}</Text>
+        <Text style={styles.eventName} numberOfLines={1}>{item?.activity}</Text>
         <Text style={styles.eventDate}>{formattedDate}</Text>
         {item?.location && 
         <View style={styles.locationContainer}>
           <LocationIcon />
-          <Text style={styles.eventLocation}>{item?.location}</Text>
+          <Text style={styles.eventLocation} numberOfLines={1} >{item?.location}</Text>
         </View>}
         <TouchableOpacity>
           <Text style={styles.viewMap}>View on map</Text>
@@ -438,11 +438,11 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
 
     return (
       <View key={index} style={styles.eventCard}>
-        <Text style={styles.eventName}>{item?.activity}</Text>
+        <Text style={styles.eventName} numberOfLines={1}>{item?.activity}</Text>
         <Text style={styles.eventDate}>{formattedDate}</Text>
         <View style={styles.locationContainer}>
           <LocationIcon />
-          <Text style={styles.eventLocation}>{item?.location}</Text>
+          <Text style={styles.eventLocation} numberOfLines={1}>{item?.location}</Text>
         </View>
         <TouchableOpacity>
           <Text style={styles.viewMap}>View on map</Text>
@@ -633,7 +633,7 @@ const styles = StyleSheet.create({
   },
   eventCard: {
     marginRight: 8,
-    maxWidth:widthPercentageToDP(75),
+    maxWidth:widthPercentageToDP(70),
     backgroundColor: Theme.WHITE_COLOR,
     borderRadius: 16,
     paddingHorizontal: widthPercentageToDP(4),
