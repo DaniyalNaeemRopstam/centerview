@@ -9,8 +9,8 @@ const GET_SPEAKERS = BaseUrl + 'wp-json/wp/v2/posts'
 const GET_UPCOMMING_EVENTS = BaseUrl + 'wp-json/wp/v2/activities/'
 const REGISTER_EVENTS = BaseUrl + "wp-json/wp/v2/user-register-activity/"
 const UNREGISTER_EVENTS = BaseUrl + "wp-json/wp/v2/user-unregister-activity/"
-
+const HOME_API = BaseUrl + 'wp-json/wp/v2/home/'
 
 export const API_URLS = {
-    LOGIN_URL, GET_SPEAKERS, GET_UPCOMMING_EVENTS, REGISTER_EVENTS, UNREGISTER_EVENTS
+    LOGIN_URL, GET_SPEAKERS, GET_UPCOMMING_EVENTS, REGISTER_EVENTS, UNREGISTER_EVENTS, HOME_API
 }

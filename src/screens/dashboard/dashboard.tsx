@@ -289,12 +289,17 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const [speakerData, setSpeakersData] = useState([]);
   const [upcommingEvents, setUpcommingEvents] = useState([]);
   const [registeredEvents, setRegisteredEvents] = useState([]);
-
+  const [dataCounts, setDataCounts] = useState({
+    total_activities:0,
+    total_speakers:0,
+    total_registered_activities:0
+  })
 
   useEffect(() => {
     getSpeakersDetail();
     getUpcommingEvents();
-    getRegisteredEvents()
+    getRegisteredEvents();
+    getHomeDetail()
   }, [])
 
   useEffect(()=>{
@@ -323,7 +328,6 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       }
 
       if (enabled) {
-        console.log('Notification permission granted.');
         await getFCMToken(); 
       } else {
         Alert.alert("Permission denied", "You won't receive notifications");
@@ -337,8 +341,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     try {
       const token = await messaging().getToken();
       if (token) {
-        console.log('FCM Token:', token);
-        // Store the token in your backend or local storage as needed
+        
       } else {
         console.warn('Failed to get FCM token');
       }
@@ -346,11 +349,6 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       console.error('Error getting FCM token:', error);
     }
   };
-
-
-
-
-
 
 
 
@@ -364,8 +362,21 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     } finally {
       setSpeakersLoader(false)
     }
-
   }
+
+  const getHomeDetail = async () => {
+    try {
+      setSpeakersLoader(true)
+      let response = await axiosWrapper('GET', API_URLS.HOME_API,null, token);
+      setDataCounts(response?.data);
+
+    } catch (e) {
+    } finally {
+      setSpeakersLoader(false)
+    }
+  }
+
+
 
   const getUpcommingEvents = async () => {
     try {
@@ -541,7 +552,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
             style={styles.topTile}>
             <TotalEvents fontSize={widthPercentageToDP(10)} />
             <View>
-              <Text style={styles.totalNumbers}>12</Text>
+              <Text style={styles.totalNumbers}>{dataCounts?.total_activities}</Text>
               <Text style={styles.total}>Total</Text>
               <Text style={styles.total}>Activities</Text>
             </View>
@@ -552,7 +563,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
             style={styles.topTile}>
             <TotalSpeakers />
             <View>
-              <Text style={styles.totalNumbers}>17</Text>
+              <Text style={styles.totalNumbers}>{dataCounts?.total_speakers}</Text>
               <Text style={styles.total}>Total</Text>
               <Text style={styles.total}>Speakers</Text>
             </View>
@@ -564,7 +575,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           style={[styles.topTile, styles.topBottomTiles]}>
           <RegisterGreen />
           <View>
-            <Text style={styles.totalNumbers}>05</Text>
+            <Text style={styles.totalNumbers}>{dataCounts?.total_registered_activities}</Text>
             <Text style={styles.total}>Registered Activities</Text>
           </View>
         </TouchableOpacity>

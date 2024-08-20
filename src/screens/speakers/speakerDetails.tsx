@@ -7,11 +7,12 @@ import {
 import Theme from '../../utils/theme';
 import Circle from '../../components/backgroundCircle';
 import fonts from '../../utils/fonts';
-import HTML from 'react-native-render-html';
+import HTML,{ defaultSystemFonts } from 'react-native-render-html';
 
 export default function SpeakerDetails(props?: any) {
   const speakerDetail = props?.route?.params?.speaker;
   const { width } = useWindowDimensions();
+  
   return (
     <>
       <Circle />
@@ -21,10 +22,10 @@ export default function SpeakerDetails(props?: any) {
         <View style={styles.imageCont}>
           <Image source={{uri:speakerDetail?.jetpack_featured_media_url || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}} style={styles.image} />
         </View>
-        <Text style={styles.name}>{speakerDetail?.name}</Text>
+        <Text style={styles.name}>{speakerDetail?.title?.rendered}</Text>
         {/* <Text style={styles.detail}>{speakerDetail?.detail}</Text> */}
         <View style={styles.detail}>
-          <HTML source={{ html: speakerDetail?.detail }} contentWidth={width}/>
+          <HTML  source={{ html: speakerDetail?.detail, }} baseStyle={styles.baseStyle}  contentWidth={width}  />
         </View>
 
       </ScrollView>
@@ -67,4 +68,9 @@ const styles = StyleSheet.create({
     width: widthPercentageToDP(90),
     marginTop: heightPercentageToDP(1.2),
   },
+  baseStyle : {
+    color: Theme.BLACK_COLOR, // Set your desired text color here
+    fontSize: 16,
+    fontFamily:fonts.Regular
+  }
 });
