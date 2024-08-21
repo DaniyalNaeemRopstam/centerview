@@ -33,8 +33,6 @@ import AlertService from '../../services/AlertService';
 import messaging from '@react-native-firebase/messaging';
 
 
-
-
 export default function Dashboard(props?: any) {
   const user = useSelector((state: any) => state.login.user);
   const token = useSelector((state: any) => state.login.token);
@@ -257,12 +255,21 @@ export default function Dashboard(props?: any) {
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
 
+    {item.is_registered === 0 ?(
         <CustomButton
           BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
           text="Register"
           textStyle={styles.unregisterTxt}
           onPress={() => { registerEvents(item.id) }}
         />
+      ):
+      <CustomButton
+      BtnContstyle={[styles.unregisterBtn, styles.grayregisterBtn]}
+      text="Already Registered"
+      textStyle={styles.unregisterTxt}
+     
+    />
+    }
       </View>
     );
   };
@@ -513,6 +520,9 @@ const styles = StyleSheet.create({
     width: widthPercentageToDP(60),
   },
   registerBtn: { backgroundColor: Theme.ROLLER_COASTER_BLUE },
+  grayregisterBtn: {
+    backgroundColor: Theme.RAINY_GREY,
+  },
   unregisterTxt: {
     color: Theme.WHITE_COLOR,
     fontFamily: fonts.Medium,
