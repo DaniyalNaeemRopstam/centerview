@@ -341,7 +341,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     try {
       const token = await messaging().getToken();
       if (token) {
-        
+      
       } else {
         console.warn('Failed to get FCM token');
       }
