@@ -94,7 +94,7 @@ export default function RegisteredEvents() {
         <Text style={styles.eventDate}>{formattedDate}</Text>
         {
           item?.location &&
-          <View style={styles.locationContainer}>
+          <View style={styles.locationContainer}> 
             <LocationIcon />
             <Text style={styles.eventLocation}>{item?.location}</Text>
           </View>}

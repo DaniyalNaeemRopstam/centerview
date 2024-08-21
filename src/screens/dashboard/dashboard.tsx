@@ -90,12 +90,24 @@ export default function Dashboard(props?: any) {
       console.error('Failed to request permission or get FCM token:', error);
     }
   };
-
   const getFCMToken = async () => {
     try {
-      const token = await messaging().getToken();
-      if (token) {
+      // Get the FCM token from Firebase Messaging
+      const devicetoken = await messaging().getToken();
 
+      if (devicetoken) {
+        // Prepare the payload to send to your API
+        const payload = {
+          device_token: devicetoken,
+        };
+
+        console.log('FCM Token:', payload);
+
+        // Send a POST request to your API with the token
+        const response = await axiosWrapper('POST', API_URLS.DEVICE_TOKEN_API, payload, token, false, 'json', true);
+
+        // Handle the response if needed, e.g., logging the success
+        console.log('Token successfully sent to the server:', response.data);
       } else {
         console.warn('Failed to get FCM token');
       }
@@ -103,8 +115,6 @@ export default function Dashboard(props?: any) {
       console.error('Error getting FCM token:', error);
     }
   };
-
-
 
   const getSpeakersDetail = async () => {
     try {
@@ -129,8 +139,6 @@ export default function Dashboard(props?: any) {
       setSpeakersLoader(false)
     }
   }
-
-
 
   const getUpcommingEvents = async () => {
     try {
@@ -255,21 +263,21 @@ export default function Dashboard(props?: any) {
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
 
-    {item.is_registered === 0 ?(
-        <CustomButton
-          BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
-          text="Register"
-          textStyle={styles.unregisterTxt}
-          onPress={() => { registerEvents(item.id) }}
-        />
-      ):
-      <CustomButton
-      BtnContstyle={[styles.unregisterBtn, styles.grayregisterBtn]}
-      text="Already Registered"
-      textStyle={styles.unregisterTxt}
-     
-    />
-    }
+        {item.is_registered === 0 ? (
+          <CustomButton
+            BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
+            text="Register"
+            textStyle={styles.unregisterTxt}
+            onPress={() => { registerEvents(item.id) }}
+          />
+        ) :
+          <CustomButton
+            BtnContstyle={[styles.unregisterBtn, styles.grayregisterBtn]}
+            text="Already Registered"
+            textStyle={styles.unregisterTxt}
+
+          />
+        }
       </View>
     );
   };
