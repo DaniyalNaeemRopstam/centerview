@@ -10,6 +10,7 @@ import {
   PermissionsAndroid,
   Alert,
   Platform,
+  RefreshControl
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import TotalEvents from '../../assets/SVG/totalEvents';
@@ -37,251 +38,6 @@ import messaging from '@react-native-firebase/messaging';
 export default function Dashboard(props?: any) {
   const user = useSelector((state: any) => state.login.user);
   const token = useSelector((state: any) => state.login.token);
-  // const [registeredEvents] = useState([
-  //   {
-  //     name: 'Welcome Brunch',
-  //     date: '2024-08-21T08:00:00.000000',
-  //     location: 'Talavera Restaurant',
-  //   },
-  //   {
-  //     name: 'Lunch Activity',
-  //     date: '2024-08-21T08:00:00.000000',
-  //     location: 'Talavera Restaurant',
-  //   },
-  //   {
-  //     name: 'Breakfast Activity',
-  //     date: '2024-08-21T08:00:00.000000',
-  //     location: 'Talavera Restaurant',
-  //   },
-  // ]);
-
-  const [speakers] = useState([
-    {
-      name: 'Mark Milley',
-      image: require('../../assets/speakers/Alex.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-
-General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-
-While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-
-General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Stephen colbert',
-      image: require('../../assets/speakers/Ben.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Arthur Brooks',
-      image: require('../../assets/speakers/Chloe.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'David',
-      image: require('../../assets/speakers/David.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Emily',
-      image: require('../../assets/speakers/Emily.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Felix',
-      image: require('../../assets/speakers/Felix.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Grace',
-      image: require('../../assets/speakers/Grace.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Henry',
-      image: require('../../assets/speakers/Henry.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Isabella',
-      image: require('../../assets/speakers/Isabella.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Jack',
-      image: require('../../assets/speakers/Jack.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Lily',
-      image: require('../../assets/speakers/Lily.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Noah',
-      image: require('../../assets/speakers/Noah.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Olivia',
-      image: require('../../assets/speakers/Olivia.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-    {
-      name: 'Sophia',
-      image: require('../../assets/speakers/Sophia.png'),
-      detail: `General Mark A. Milley served as the 20th Chairman of the Joint Chiefs of Staff, the nation’s highest-ranking military officer, and the principal military advisor to the President, Secretary of Defense, and National Security Council. He retired Sept. 29, 2023.
-
-      Prior to becoming Chairman on October 1, 2019, General Milley served as the 39th Chief of Staff of the U.S. Army.
-      A native of Massachusetts, General Milley graduated from Princeton University in 1980, where he received his commission from Army ROTC.
-      
-      General Milley has had multiple command and staff positions in six divisions and a Special Forces Group throughout the last 44 years to include command of the 1st Battalion, 506th Infantry, 2nd Infantry Division; the 2nd Brigade Combat Team, 10th Mountain Division; Deputy Commanding General, 101st Airborne Division (Air Assault); Commanding General, 10th Mountain Division; Commanding General, III Corps; and Commanding General, U.S. Army Forces Command.
-      
-      While serving as the Commanding General, III Corps, General Milley deployed as the Commanding General, International Security Assistance Force Joint Command and Deputy Commanding General, U.S. Forces Afghanistan. General Milley’s joint assignments also include the Joint Staff operations directorate and as Military Assistant to the Secretary of Defense.
-      
-      General Milley’s operational deployments include the Multi-National Force and Observers Task Force, Sinai, Egypt; Operation JUST CAUSE, Panama; Operation UPHOLD DEMOCRACY, Haiti; Operation JOINT FORGE, Bosnia-Herzegovina; Operation IRAQI FREEDOM, Iraq; and three tours during Operation ENDURING FREEDOM, Afghanistan. GEN Milley also deployed to Colombia, Somalia and served two years on the DMZ in the Republic of Korea.
-      In addition to his bachelor’s degree in political science from Princeton University, General Milley has a master’s degree in international relations from Columbia University and one from the U.S. Naval War College in national security and strategic studies. He is also a graduate of the MIT Seminar XXI National Security Studies Program.
-      General Milley and his wife, Hollyanne, have been married for more than 38 years and have two children.`,
-    },
-  ]);
-
   const [loader, setLoader] = useState(false)
   const [speakerLoader, setSpeakersLoader] = useState(false)
   const [upcommingEventsloader, setUpcommingEventsLoader] = useState(false)
@@ -290,9 +46,9 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const [upcommingEvents, setUpcommingEvents] = useState([]);
   const [registeredEvents, setRegisteredEvents] = useState([]);
   const [dataCounts, setDataCounts] = useState({
-    total_activities:0,
-    total_speakers:0,
-    total_registered_activities:0
+    total_activities: 0,
+    total_speakers: 0,
+    total_registered_activities: 0
   })
 
   useEffect(() => {
@@ -302,9 +58,9 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     getHomeDetail()
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     requestUserPermission()
-  },[])
+  }, [])
 
 
   const requestUserPermission = async () => {
@@ -323,12 +79,12 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
           );
           enabled = granted === PermissionsAndroid.RESULTS.GRANTED;
         } else {
-          enabled = true; 
+          enabled = true;
         }
       }
 
       if (enabled) {
-        await getFCMToken(); 
+        await getFCMToken();
       } else {
         Alert.alert("Permission denied", "You won't receive notifications");
       }
@@ -341,7 +97,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     try {
       const token = await messaging().getToken();
       if (token) {
-        
+
       } else {
         console.warn('Failed to get FCM token');
       }
@@ -367,7 +123,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const getHomeDetail = async () => {
     try {
       setSpeakersLoader(true)
-      let response = await axiosWrapper('GET', API_URLS.HOME_API,null, token);
+      let response = await axiosWrapper('GET', API_URLS.HOME_API, null, token);
       setDataCounts(response?.data);
 
     } catch (e) {
@@ -394,7 +150,7 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
   const getRegisteredEvents = async () => {
     try {
       setRegisterdEventsLoader(true)
-      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?register=${user?.id}`, null, token, false, 'json', false);
+      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?registered_activities=1`, null, token, false, 'json', false);
       setRegisteredEvents(response?.data?.activities);
 
     } catch (e) {
@@ -403,29 +159,6 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
     }
 
   }
-
-
-
-  const [activities] = useState([
-    {
-      name: 'Welcome Brunch',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-    {
-      name: 'Lunch Activity',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-    {
-      name: 'Breakfast Activity',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-  ]);
-
-
-
   const unRegisterEvents = async (event_id: any) => {
     try {
       let data = { event_id, }
@@ -533,6 +266,25 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       </View>
     );
   };
+  // Fetch initial data when the component mounts
+  useEffect(() => {
+    fetchData();
+  }, []);
+  // Function to fetch all required data
+  const fetchData = () => {
+    getSpeakersDetail();
+    getUpcommingEvents();
+    getRegisteredEvents();
+    getHomeDetail();
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+  // Function to handle pull-to-refresh
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  };
 
   return (
     <>
@@ -540,12 +292,15 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
       {
         loader &&
         <View style={styles.loaderComp}>
-          <ActivityIndicator size={'large'} color={Theme.WHITE_COLOR} />
+          <ActivityIndicator size={'large'} color={Theme.WHITE_COLOR}
+          />
         </View>
       }
       <ScrollView
         style={styles.scrollViewStyle}
-        contentContainerStyle={styles.scrollViewCont}>
+        contentContainerStyle={styles.scrollViewCont}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={styles.topTilesCont}>
           <TouchableOpacity
             // onPress={() => props?.navigation?.navigate('EVENTS')}
@@ -579,10 +334,6 @@ General Milley and his wife, Hollyanne, have been married for more than 38 years
             <Text style={styles.total}>Registered Activities</Text>
           </View>
         </TouchableOpacity>
-
-        {/* <Text style={styles.registeredHeading}>Registered Activities</Text> */}
-
-
         <View style={styles.headingCont}>
           <Text style={styles.speakersHeading}>Registered Activities</Text>
           <CustomButton
