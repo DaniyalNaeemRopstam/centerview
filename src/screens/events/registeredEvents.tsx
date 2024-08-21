@@ -38,29 +38,18 @@ export default function RegisteredEvents() {
   const [dateForAPI, setDateForAPI] = useState(`${moment().year()}-${moment().month()}-${moment().date()}`)
 
   const handleDateChange = (day: number, month: number, year: number) => {
-    setSelectedDate(`${day} ${months[month - 1]}, ${year}`);
-    setDateForAPI(`${year}-${month}-${day}`)
+    // Prefix day and month with '0' if they are single digits
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedMonth = month < 10 ? `0${month}` : month;
+  
+    // Format the date strings
+    setSelectedDate(`${formattedDay} ${months[month - 1]}, ${year}`);
+    setDateForAPI(`${year}-${formattedMonth}-${formattedDay}`);
     setRegisteredEvents([])
   };
-  const [activities] = useState([
-    {
-      name: 'Welcome Brunch',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-    {
-      name: 'Lunch Activity',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-
-  ]);
-
   const [registeredEventsloader, setRegisteredEventsLoader] = useState(false)
   const [registeredEvents, setRegisteredEvents] = useState([]);
   const [loader, setLoader] = useState(false)
-
-
   useEffect(() => {
     getRegisteredEvents()
   }, [dateForAPI])
@@ -68,15 +57,12 @@ export default function RegisteredEvents() {
   const getRegisteredEvents = async () => {
     try {
       setRegisteredEventsLoader(true)
-      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?date=${dateForAPI}&register=${user?.id}`, null, token, false, 'json', false);
-
+      let response = await axiosWrapper('GET', `${API_URLS.GET_UPCOMMING_EVENTS}?registered_activities=1&date=${dateForAPI}`, null, token, false, 'json', false);  
       setRegisteredEvents(response?.data?.activities);
-
     } catch (e) {
     } finally {
       setRegisteredEventsLoader(false)
     }
-
   }
 
   const unRegisterEvents = async (event_id: any) => {
@@ -96,13 +82,6 @@ export default function RegisteredEvents() {
     }
 
   }
-
-
-
-
-
-
-
   const renderEvents = ({ item, index }: any) => {
     const isoString = item?.datetime;
     const formattedDate = moment(isoString).format(
@@ -115,7 +94,7 @@ export default function RegisteredEvents() {
         <Text style={styles.eventDate}>{formattedDate}</Text>
         {
           item?.location &&
-          <View style={styles.locationContainer}>
+          <View style={styles.locationContainer}> 
             <LocationIcon />
             <Text style={styles.eventLocation}>{item?.location}</Text>
           </View>}
@@ -131,8 +110,6 @@ export default function RegisteredEvents() {
       </View>
     );
   };
-
-
   return (
     <>
       <Circle />
@@ -158,7 +135,6 @@ export default function RegisteredEvents() {
           ListEmptyComponent={registeredEventsloader ? <ActivityIndicator size={'large'} color={'black'} style={{ flex: 1 }} /> : <Text>No registered events found</Text>}
 
         />
-
       </SafeAreaView>
     </>
   );

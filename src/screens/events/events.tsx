@@ -33,52 +33,22 @@ export default function Events() {
   const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month() - 1]}, ${moment().year()}`)
   const [dateForAPI, setDateForAPI] = useState(`${moment().year()}-${moment().month()}-${moment().date()}`)
   const handleDateChange = (day: number, month: number, year: number) => {
-    setSelectedDate(`${day} ${months[month - 1]}, ${year}`);
-    setDateForAPI(`${year}-${month}-${day}`)
-    setUpcommingEvents([])
+    // Prefix day and month with '0' if they are single digits
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedMonth = month < 10 ? `0${month}` : month;
+  
+    // Format the date strings
+    setSelectedDate(`${formattedDay} ${months[month - 1]}, ${year}`);
+    setDateForAPI(`${year}-${formattedMonth}-${formattedDay}`);
+    setUpcommingEvents([]);
   };
-  const [activities] = useState([
-    {
-      name: 'Welcome Brunch',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-    {
-      name: 'Lunch Activity',
-      date: '2024-08-21T08:00:00.000000',
-      location: 'Talavera Restaurant',
-    },
-    {
-      name: 'Global Challenges: Thriving in the 21st Century',
-      date: '2024-08-21T07:15:00.000000',
-      location: 'Talavera Restaurant',
-      suggestedAttire: 'Closed toe-shoes, shorts, t-shirt, hat, sunglasses + sunscreen. Special riding equipment available for experience riders.',
-      speakers: [
-        {
-          name: 'Bari Weiss,',
-          bio: 'Publisher of Common Sense and Host of Honestly',
-        },
-        {
-          name: 'Ronan Farrow,',
-          bio: 'Pulitzer Prize-Winning Investigative Reporter and New York Times Bestselling Author',
-        },
-        {
-          name: 'Moderated by Reena Ninan,',
-          bio: 'Television Journalist',
-        },
-      ]
-    },
-  ]);
+
   const [upcommingEventsloader, setUpcommingEventsLoader] = useState(false)
   const [upcommingEvents, setUpcommingEvents] = useState([]);
   const [loader, setLoader] = useState(false)
-
-
-
   useEffect(() => {
     getUpcommingEvents()
   }, [dateForAPI])
-
 
   const getUpcommingEvents = async () => {
     try {
@@ -148,12 +118,21 @@ export default function Events() {
             ))}
           </View>
         )}
+  {item.is_registered === 0 ?(
         <CustomButton
           BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
           text="Register"
           textStyle={styles.unregisterTxt}
           onPress={() => { registerEvents(item.id) }}
         />
+      ):
+      <CustomButton
+      BtnContstyle={[styles.unregisterBtn, styles.grayregisterBtn]}
+      text="Already Registered"
+      textStyle={styles.unregisterTxt}
+     
+    />
+    }
       </View>
     );
   };
@@ -303,6 +282,10 @@ const styles = StyleSheet.create({
   registerBtn: {
     backgroundColor: Theme.ROLLER_COASTER_BLUE,
   },
+  grayregisterBtn: {
+    backgroundColor: Theme.RAINY_GREY,
+  },
+  
   unregisterTxt: {
     color: Theme.WHITE_COLOR,
     fontFamily: fonts.Medium,
