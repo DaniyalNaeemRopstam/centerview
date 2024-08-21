@@ -118,12 +118,21 @@ export default function Events() {
             ))}
           </View>
         )}
+  {item.is_registered === 0 ?(
         <CustomButton
           BtnContstyle={[styles.unregisterBtn, styles.registerBtn]}
           text="Register"
           textStyle={styles.unregisterTxt}
           onPress={() => { registerEvents(item.id) }}
         />
+      ):
+      <CustomButton
+      BtnContstyle={[styles.unregisterBtn, styles.grayregisterBtn]}
+      text="Already Registered"
+      textStyle={styles.unregisterTxt}
+     
+    />
+    }
       </View>
     );
   };
@@ -273,6 +282,10 @@ const styles = StyleSheet.create({
   registerBtn: {
     backgroundColor: Theme.ROLLER_COASTER_BLUE,
   },
+  grayregisterBtn: {
+    backgroundColor: Theme.RAINY_GREY,
+  },
+  
   unregisterTxt: {
     color: Theme.WHITE_COLOR,
     fontFamily: fonts.Medium,
