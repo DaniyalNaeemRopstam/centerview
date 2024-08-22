@@ -28,7 +28,7 @@ const months: string[] = [
   'December'
 ];
 
-export default function Events() {
+export default function Events(props:any) {
   const token = useSelector((state: any) => state.login.token);
   const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month() - 1]}, ${moment().year()}`)
   const [dateForAPI, setDateForAPI] = useState(`${moment().year()}-${moment().month()}-${moment().date()}`)
@@ -81,6 +81,10 @@ export default function Events() {
 
   }
 
+  const mapNavigation = () =>{
+    props.navigation.navigate("Resort Map")
+  }
+
 
   const renderEvents = ({ item, index }: any) => {
     if (!item) return null;
@@ -97,7 +101,7 @@ export default function Events() {
             <LocationIcon />
             <Text style={styles.eventLocation}>{item?.location}</Text>
           </View>}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={mapNavigation}>
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
         {item?.suggestedAttire && (

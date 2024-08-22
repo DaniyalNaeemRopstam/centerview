@@ -101,13 +101,13 @@ export default function Dashboard(props?: any) {
           device_token: devicetoken,
         };
 
-        console.log('FCM Token:', payload);
+        // console.log('FCM Token:', payload);
 
         // Send a POST request to your API with the token
         const response = await axiosWrapper('POST', API_URLS.DEVICE_TOKEN_API, payload, token, false, 'json', true);
 
         // Handle the response if needed, e.g., logging the success
-        console.log('Token successfully sent to the server:', response.data);
+        // console.log('Token successfully sent to the server:', response);
       } else {
         console.warn('Failed to get FCM token');
       }
@@ -165,6 +165,12 @@ export default function Dashboard(props?: any) {
     }
 
   }
+
+
+  const mapNavigation = () =>{
+    props.navigation.navigate("Resort Map")
+  }
+
   const unRegisterEvents = async (event_id: any) => {
     try {
       let data = { event_id, }
@@ -189,6 +195,7 @@ export default function Dashboard(props?: any) {
       'DD MMMM, YYYY [at] HH:mm A',
     );
 
+   
     return (
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName} numberOfLines={1}>{item?.activity}</Text>
@@ -198,7 +205,7 @@ export default function Dashboard(props?: any) {
             <LocationIcon />
             <Text style={styles.eventLocation} numberOfLines={1} >{item?.location}</Text>
           </View>}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={mapNavigation}>
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
         <CustomButton
@@ -259,7 +266,7 @@ export default function Dashboard(props?: any) {
           <LocationIcon />
           <Text style={styles.eventLocation} numberOfLines={1}>{item?.location}</Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={mapNavigation} >
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
 

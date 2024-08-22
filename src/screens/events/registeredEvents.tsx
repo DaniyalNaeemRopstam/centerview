@@ -31,7 +31,7 @@ const months: string[] = [
 
 
 
-export default function RegisteredEvents() {
+export default function RegisteredEvents(props:any) {
   const user = useSelector((state:any) => state.login.user);
   const token = useSelector((state: any) => state.login.token);
   const [selectedDate, setSelectedDate] = useState(`${moment().date()} ${months[moment().month() - 1]}, ${moment().year()}`)
@@ -88,6 +88,10 @@ export default function RegisteredEvents() {
       'DD MMMM, YYYY [at] HH:mm A',
     );
 
+    const mapNavigation = () =>{
+      props.navigation.navigate("Resort Map")
+    }
+
     return (
       <View key={index} style={styles.eventCard}>
         <Text style={styles.eventName}>{item?.activity}</Text>
@@ -98,7 +102,7 @@ export default function RegisteredEvents() {
             <LocationIcon />
             <Text style={styles.eventLocation}>{item?.location}</Text>
           </View>}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={mapNavigation}>
           <Text style={styles.viewMap}>View on map</Text>
         </TouchableOpacity>
         <CustomButton
