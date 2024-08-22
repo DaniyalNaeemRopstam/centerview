@@ -100,14 +100,11 @@ export default function Dashboard(props?: any) {
         const payload = {
           device_token: devicetoken,
         };
-
-        // console.log('FCM Token:', payload);
-
         // Send a POST request to your API with the token
         const response = await axiosWrapper('POST', API_URLS.DEVICE_TOKEN_API, payload, token, false, 'json', true);
 
         // Handle the response if needed, e.g., logging the success
-        // console.log('Token successfully sent to the server:', response);
+        console.log('Token successfully sent to the server:', response);
       } else {
         console.warn('Failed to get FCM token');
       }
