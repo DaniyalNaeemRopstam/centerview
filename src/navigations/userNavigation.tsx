@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Profile from '../screens/profile/profile';
@@ -15,12 +15,15 @@ import Speakers from '../screens/speakers/speakers';
 import SpeakerDetails from '../screens/speakers/speakerDetails';
 import Logout from '../assets/SVG/logout';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { saveUser } from '../redux/features/AuthSlice';
 import fonts from '../utils/fonts';
 import Theme from '../utils/theme';
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationsIcon from '../components/notificationIcon';
+import { NOTIFICATION_CONTEXT } from '../../App';
+import axiosWrapper from '../services/AxiosWrapper';
+import { API_URLS } from '../services/apiPathList';
 type RootStackParamList = {
   BOTTOM_TAB: undefined;
   DASHBOARD: undefined;
@@ -36,6 +39,26 @@ export default function UserNavigator() {
   const Stack = createStackNavigator<RootStackParamList>();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
+
+  const token = useSelector((state: any) => state?.login?.token);
+  const {notificaitonData,setNotificaitonData} = useContext(NOTIFICATION_CONTEXT)
+  let count = notificaitonData.filter((item:any) => !item?.isRead)?.length;
+  
+
+  useEffect(()=>{
+    getNotificaitons()
+  },[])
+
+  const getNotificaitons = async () =>{
+    try {
+      let response = await axiosWrapper('GET', API_URLS.NOTIFICATION_LIST,null,token );
+      setNotificaitonData(response?.data?.notifications)
+    } catch (error) {
+                                                                                                          
+    }
+  }
+
+  
 
 
   const handleLogout = () => {
@@ -69,7 +92,6 @@ export default function UserNavigator() {
           );
         },
       }}>
-
 
       <Stack.Screen
         name="BOTTOM_TAB"
@@ -113,7 +135,7 @@ export default function UserNavigator() {
               <View style={styles.headerRightCont}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <NotificationsIcon  notifications={1}/>
+                  <NotificationsIcon  notifications={count}/>
                 </TouchableOpacity>
               </View>
             );
@@ -131,7 +153,7 @@ export default function UserNavigator() {
               <View style={styles.headerRightCont}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <NotificationsIcon  notifications={1}/>
+                  <NotificationsIcon  notifications={count}/>
                 </TouchableOpacity>
               </View>
             );
@@ -149,7 +171,7 @@ export default function UserNavigator() {
               <View style={styles.headerRightCont}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <NotificationsIcon  notifications={1}/>
+                  <NotificationsIcon  notifications={count}/>
                 </TouchableOpacity>
               </View>
             );

@@ -25,8 +25,6 @@ export default function Speakers(props?: any) {
     try{
       setLoader(true)
       let response = await axiosWrapper('GET', API_URLS.GET_SPEAKERS);
-      console.log("response", response);
-      
       setSpeakersData(response);
 
     }catch(e){

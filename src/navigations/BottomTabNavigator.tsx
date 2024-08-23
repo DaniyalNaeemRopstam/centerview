@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Dashboard from '../screens/dashboard/dashboard';
 import { Image, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -17,6 +17,7 @@ import AirportTransfer from '../screens/airportTransfer/AirportTransfer';
 import ResortMaps from '../screens/resortMaps/ResortMaps';
 import NotificationsIcon from '../components/notificationIcon';
 import { useSelector } from 'react-redux';
+import { NOTIFICATION_CONTEXT } from '../../App';
 
 type RootStackParamList = {
   DASHBOARD: undefined;
@@ -34,6 +35,12 @@ const BottomTabNavigator = () => {
   const user = useSelector((state:any) => state.login.user);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  
+  const {notificaitonData} = useContext(NOTIFICATION_CONTEXT)
+  let count = notificaitonData.filter((item:any) => !item?.isRead)?.length;
+  
+  
+  
   return (
     <Tab.Navigator
       initialRouteName='Dashboard'
@@ -77,7 +84,7 @@ const BottomTabNavigator = () => {
         component={ResortMaps}
         options={{
           headerTitle: 'Resort Map',
-          headerLeft:null,
+          headerLeft:()=>(<></>),
         }}
       />
       <Tab.Screen
@@ -104,7 +111,7 @@ const BottomTabNavigator = () => {
                 
                 <TouchableOpacity
                   onPress={() => navigation.navigate('NOTIFICATION')}>
-                  <NotificationsIcon  notifications={1}/>
+                  <NotificationsIcon  notifications={count}/>
                 </TouchableOpacity>
               </View>
             );
@@ -116,7 +123,7 @@ const BottomTabNavigator = () => {
         component={AirportTransfer}
         options={{
           headerTitle: 'Airport Transfer',
-          headerLeft:null,
+          headerLeft:()=>(<></>),
         }}
       />
     </Tab.Navigator>

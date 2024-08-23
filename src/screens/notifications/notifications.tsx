@@ -1,5 +1,5 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useContext, useState} from 'react';
 import Theme from '../../utils/theme';
 import {
   heightPercentageToDP,
@@ -9,8 +9,13 @@ import NotificationLeftIcon from '../../assets/SVG/notificationLeftIcon';
 import moment from 'moment';
 import fonts from '../../utils/fonts';
 import NoNotifications from '../../assets/SVG/noNotifications';
+import { NOTIFICATION_CONTEXT } from '../../../App';
 
 export default function Notifications() {
+
+  const {notificaitonData,setNotificaitonData} = useContext(NOTIFICATION_CONTEXT)
+
+
   const [notifications] = useState([
     {
       title: 'New Activity Organized',
@@ -98,9 +103,21 @@ export default function Notifications() {
     }
   };
 
+  const handleNotificaiton = (id:any)=>{
+    
+    setNotificaitonData((prevData:any) => 
+      prevData.map((notification:any) => 
+          notification.activity_id === id 
+              ? { ...notification, isRead: true } 
+              : notification
+      )
+  );
+  }
+
+ 
   const renderNotifications = ({item, index}: any) => {
     return (
-      <View key={index} style={styles.notificationCont}>
+      <TouchableOpacity key={index} style={styles.notificationCont} onPress={()=> handleNotificaiton(item.activity_id)} >
         <NotificationLeftIcon />
 
         <View style={styles.notificationInnerCont}>
@@ -109,19 +126,19 @@ export default function Notifications() {
             <Text style={styles.date}>{formatDate(item.date)}</Text>
           </View>
           <View style={styles.notificationInnerCont2}>
-            <Text style={styles.message}>{item?.message}</Text>
+            <Text style={styles.message}>{item?.notification}</Text>
             {!item?.isRead && <View style={styles.notificationRead} />}
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   return (
     <>
-      {sortedNotifications.length > 0 ? (
+      {notificaitonData.length > 0 ? (
         <FlatList
-          data={sortedNotifications}
+          data={notificaitonData}
           renderItem={renderNotifications}
           contentContainerStyle={styles.contentContainerStyle}
         />
@@ -196,6 +213,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Medium,
     color: Theme.SPENISH_GREY,
     lineHeight: 16,
+    width:'90%',
   },
   noNotificationCont: {
     flex: 0.9,
