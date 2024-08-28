@@ -59,7 +59,7 @@ export default function Notifications() {
           </View>
           <View style={styles.notificationInnerCont2}>
             <Text style={styles.message}>{item?.notification}</Text>
-            {!item?.isRead && <View style={styles.notificationRead} />}
+            {!item?.is_read && <View style={styles.notificationRead} />}
           </View>
         </View>
       </TouchableOpacity>

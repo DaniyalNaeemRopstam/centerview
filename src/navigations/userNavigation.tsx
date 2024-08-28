@@ -4,9 +4,6 @@ import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Profile from '../screens/profile/profile';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
-import Notification from '../assets/SVG/notification';
-import RegisteredIcon from '../assets/SVG/registeredIcon';
-
 import Notifications from '../screens/notifications/notifications';
 import ArrowBack from '../assets/SVG/arrowBack';
 import RegisteredEvents from '../screens/events/registeredEvents';
@@ -14,7 +11,6 @@ import Events from '../screens/events/events';
 import Speakers from '../screens/speakers/speakers';
 import SpeakerDetails from '../screens/speakers/speakerDetails';
 import Logout from '../assets/SVG/logout';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { saveUser } from '../redux/features/AuthSlice';
 import fonts from '../utils/fonts';
