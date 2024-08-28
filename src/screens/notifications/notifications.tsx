@@ -40,7 +40,7 @@ export default function Notifications() {
     setNotificaitonData((prevData:any) => 
       prevData.map((notification:any) => 
           notification.activity_id === id 
-              ? { ...notification, isRead: true } 
+              ? { ...notification, is_read: true } 
               : notification
       )
   );
