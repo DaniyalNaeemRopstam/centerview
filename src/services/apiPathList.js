@@ -12,9 +12,9 @@ const UNREGISTER_EVENTS = BaseUrl + "wp-json/wp/v2/user-unregister-activity/"
 const HOME_API = BaseUrl + 'wp-json/wp/v2/home/'
 const DEVICE_TOKEN_API = BaseUrl + 'wp-json/wp/v2/save-token/'
 const NOTIFICATION_LIST = BaseUrl + 'wp-json/wp/v2/user-notifications-list/'
-
+const NOTIFICATION_UNREAD = BaseUrl + 'wp-json/wp/v2/notification-read-unread/'
 
 export const API_URLS = {
     LOGIN_URL, GET_SPEAKERS, GET_UPCOMMING_EVENTS, REGISTER_EVENTS, UNREGISTER_EVENTS, HOME_API, DEVICE_TOKEN_API,
-    NOTIFICATION_LIST,
+    NOTIFICATION_LIST, NOTIFICATION_UNREAD,
 }

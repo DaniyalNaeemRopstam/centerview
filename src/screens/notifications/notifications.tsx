@@ -1,5 +1,5 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useContext, useState} from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useState } from 'react';
 import Theme from '../../utils/theme';
 import {
   heightPercentageToDP,
@@ -10,10 +10,15 @@ import moment from 'moment';
 import fonts from '../../utils/fonts';
 import NoNotifications from '../../assets/SVG/noNotifications';
 import { NOTIFICATION_CONTEXT } from '../../../App';
+import axiosWrapper from '../../services/AxiosWrapper';
+import { API_URLS } from '../../services/apiPathList';
+import { useSelector } from 'react-redux';
 
 export default function Notifications() {
 
-  const {notificaitonData,setNotificaitonData} = useContext(NOTIFICATION_CONTEXT)
+  const { notificaitonData, setNotificaitonData } = useContext(NOTIFICATION_CONTEXT)
+  const token = useSelector((state: any) => state.login.token);
+  const [loader, setLoader] = useState(false)
 
   const formatDate = (date: string) => {
     const now = moment();
@@ -35,26 +40,36 @@ export default function Notifications() {
     }
   };
 
-  const handleNotificaiton = (id:any)=>{
-    
-    setNotificaitonData((prevData:any) => 
-      prevData.map((notification:any) => 
-          notification.activity_id === id 
-              ? { ...notification, isRead: true } 
-              : notification
-      )
-  );
+  const handleNotificaiton = async (id: any) => {
+    try {
+      setLoader(true)
+      let response = await axiosWrapper('POST', API_URLS.NOTIFICATION_UNREAD, {meta_id:id,"is_read": 1}, token, false, 'json', false);
+      setNotificaitonData((prevData: any) =>
+        prevData.map((notification: any) =>
+          notification.meta_id === id
+            ? { ...notification, is_read: 1 }
+            : notification
+        )
+      );
+
+
+    } catch (error) {
+
+    }finally{
+      setLoader(false)
+    }
+
   }
 
- 
-  const renderNotifications = ({item, index}: any) => {
+
+  const renderNotifications = ({ item, index }: any) => {
     return (
-      <TouchableOpacity key={index} style={styles.notificationCont} onPress={()=> handleNotificaiton(item.activity_id)} >
+      <TouchableOpacity key={index} style={styles.notificationCont} onPress={() => handleNotificaiton(item.meta_id)} >
         <NotificationLeftIcon />
 
         <View style={styles.notificationInnerCont}>
           <View style={styles.titleDateCont}>
-            <Text style={styles.title}>{item?.title}</Text>
+            <Text style={styles.title} numberOfLines={2} >{item?.title}</Text>
             <Text style={styles.date}>{formatDate(item.date)}</Text>
           </View>
           <View style={styles.notificationInnerCont2}>
@@ -68,6 +83,12 @@ export default function Notifications() {
 
   return (
     <>
+    {
+      loader && 
+      <View style={styles.loader} >
+        <ActivityIndicator  color={Theme.BLACK_COLOR} size={"large"} />
+      </View>
+    }
       {notificaitonData.length > 0 ? (
         <FlatList
           data={notificaitonData}
@@ -88,6 +109,16 @@ export default function Notifications() {
 }
 
 const styles = StyleSheet.create({
+  loader:{
+    width:'100%',
+    height:'100%',
+    backgroundColor:'rgba(0,0,0,0.3)',
+    justifyContent:'center',
+    alignItems:'center',
+    position:'absolute',
+    top:0,
+    zIndex:1
+  },
   contentContainerStyle: {
     alignItems: 'center',
     paddingTop: heightPercentageToDP(2),
@@ -111,17 +142,19 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     gap: 10,
   },
-  notificationInnerCont: {flex: 1},
+  notificationInnerCont: { flex: 1 },
   titleDateCont: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   title: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: fonts.Medium,
     color: Theme.JET_COLOR,
     lineHeight: 24,
+    width:'70%',
+    
   },
   date: {
     fontSize: 12,
@@ -145,7 +178,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Medium,
     color: Theme.SPENISH_GREY,
     lineHeight: 16,
-    width:'90%',
+    width: '90%',
   },
   noNotificationCont: {
     flex: 0.9,

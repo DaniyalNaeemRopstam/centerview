@@ -37,7 +37,7 @@ const BottomTabNavigator = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   
   const {notificaitonData} = useContext(NOTIFICATION_CONTEXT)
-  let count = notificaitonData.filter((item:any) => !item?.isRead)?.length;
+  let count = notificaitonData.filter((item:any) => !item?.is_read)?.length;
   
   
   
