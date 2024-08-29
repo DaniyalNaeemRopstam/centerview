@@ -38,7 +38,7 @@ export default function UserNavigator() {
 
   const token = useSelector((state: any) => state?.login?.token);
   const {notificaitonData,setNotificaitonData} = useContext(NOTIFICATION_CONTEXT)
-  let count = notificaitonData.filter((item:any) => !item?.isRead)?.length;
+  let count = notificaitonData.filter((item:any) => !item?.is_read)?.length;
   
 
   useEffect(()=>{
