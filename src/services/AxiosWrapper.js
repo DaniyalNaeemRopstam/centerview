@@ -7,7 +7,7 @@ axios.interceptors.response.use(
         const { config } = response;
         const { method } = config;
         return response;
-    },
+    }, 
     (error) => {
         const { config } = error.response;
         const { method } = config;
@@ -53,7 +53,7 @@ const axiosWrapper = async (method, url, data, token, isFormData = false, respon
             error?.response?.data?.message ||
             error?.message;
             if (msg && showToast) 
-            {
+            { 
                 AlertService.toastPrompt(msg, 'error')
             }
           

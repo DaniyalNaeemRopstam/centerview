@@ -1,5 +1,5 @@
 // const BaseUrl = "http://167.114.144.249:4056/";
-const BaseUrl = "https://centerviewhealthcarestaging.com/";
+const BaseUrl = "centerviewhealthcaregroup.com/";
 
 export const SocketEndpoint = "SOCKETENDPOINT";
 

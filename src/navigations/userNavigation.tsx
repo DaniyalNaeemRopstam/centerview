@@ -38,7 +38,7 @@ export default function UserNavigator() {
 
   const token = useSelector((state: any) => state?.login?.token);
   const {notificaitonData,setNotificaitonData} = useContext(NOTIFICATION_CONTEXT)
-  let count = notificaitonData.filter((item:any) => !item?.is_read)?.length;
+  let count = notificaitonData?.filter((item:any) => !item?.is_read)?.length;
 
   useEffect(()=>{
     getNotificaitons()
@@ -47,10 +47,9 @@ export default function UserNavigator() {
   const getNotificaitons = async () =>{
     try {
       let response = await axiosWrapper('GET', API_URLS.NOTIFICATION_LIST,null,token );
-    if(response.data)  
+    if(response?.data)  
       setNotificaitonData(response?.data?.notifications)
-    } catch (error) {
-                                                                                                          
+    } catch (error) {                                                                                                    
     }
   }
   const handleLogout = () => {
